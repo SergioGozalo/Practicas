@@ -1,0 +1,485 @@
+---
+title: "Functional tables analysis"
+author: "Sergio Gozalo"
+date: "20 de enero de 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables/"))
+```
+
+## Loading necessary libraries
+
+```{r}
+library("vegan")
+
+```
+
+
+
+# EBI tables
+
+## Table reading EBI
+
+```{r}
+
+ebi_go_abundances <- read.table("functional.tables/ERP112966_GO_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_go_abundances$description <- NULL #Need to remove this column to work
+ebi_go_abundances$category <- NULL #Need to remove this column to work
+ebi_go_abundances <- t(ebi_go_abundances)
+
+ebi_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_go.slim_abundances$description <- NULL
+ebi_go.slim_abundances$category <- NULL
+ebi_go.slim_abundances <- t(ebi_go.slim_abundances)
+
+ebi_ipr_abundances <- read.table("functional.tables/ERP112966_IPR_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_ipr_abundances$description <- NULL
+ebi_ipr_abundances$category <- NULL
+ebi_ipr_abundances <- t(ebi_ipr_abundances)
+```
+
+## Richness
+
+```{r}
+# Subsampling
+n1 <- min(rowSums(ebi_go_abundances))
+ebi_go_abundances_ss <- rrarefy(ebi_go_abundances, n1)
+
+n2 <- min(rowSums(ebi_go.slim_abundances))
+ebi_go.slim_abundances_ss <- rrarefy(ebi_go.slim_abundances, n2)
+
+n3 <- min(rowSums(ebi_ipr_abundances))
+ebi_ipr_abundances_ss <- rrarefy(ebi_ipr_abundances, n3)
+
+# Richness
+
+ebi_go_abundances_richness <- estimateR(ebi_go_abundances_ss)
+ebi_go.slim_abundances_richness <- estimateR(ebi_go.slim_abundances_ss)
+ebi_ipr_abundances_richness <- estimateR(ebi_ipr_abundances_ss)
+```
+
+
+## NMDS
+
+### GO
+
+```{r}
+ebi_go_abundances_ss_bray <- vegdist(ebi_go_abundances_ss, method="bray")
+ebi_go_abundances_ss_bray.nmds <- monoMDS(ebi_go_abundances_ss_bray)
+
+plot(ebi_go_abundances_ss_bray.nmds, main = "GO")
+```
+
+Se observa un cluster, el resto son independientes.
+
+```{r}
+stressplot(ebi_go_abundances_ss_bray.nmds, main = "GO")
+```
+
+
+### GO-SLIM
+
+```{r}
+ebi_go.slim_abundances_ss_bray <- vegdist(ebi_go.slim_abundances_ss, method="bray")
+ebi_go.slim_abundances_ss_bray.nmds <- monoMDS(ebi_go.slim_abundances_ss_bray)
+
+plot(ebi_go.slim_abundances_ss_bray.nmds, main = "GO-SLIM")
+```
+
+Se observa un cluster, el resto son independientes.
+
+```{r}
+stressplot(ebi_go.slim_abundances_ss_bray.nmds, main = "GO-SLIM")
+```
+
+
+### IPR
+
+```{r}
+ebi_ipr_abundances_ss_bray <- vegdist(ebi_ipr_abundances_ss, method="bray")
+ebi_ipr_abundances_ss_bray.nmds <- monoMDS(ebi_ipr_abundances_ss_bray)
+
+plot(ebi_ipr_abundances_ss_bray.nmds, main = "IPR")
+```
+
+Se ve un cluster.
+
+```{r}
+stressplot(ebi_ipr_abundances_ss_bray.nmds, main = "IPR")
+```
+
+## Dendograms
+
+### GO
+
+```{r}
+ebi_go_abundances_ss_bray_hclust <- hclust(ebi_go_abundances_ss_bray, method="average")
+plot(ebi_go_abundances_ss_bray_hclust, main = "GO")
+```
+
+Se observan dos grupos principales, uno de ellos es mucho mas grande y tiene bastantes subdivisiones, siendo las dos primeras.
+
+### GO-SLIM
+
+```{r}
+ebi_go.slim_abundances_ss_bray_hclust <- hclust(ebi_go.slim_abundances_ss_bray, method="average")
+plot(ebi_go.slim_abundances_ss_bray_hclust, main = "GO-SLIM")
+```
+
+Muy parecido al GO, pero con distinta longitud de ramas.
+
+### IPR
+
+```{r}
+ebi_ipr_abundances_ss_bray_hclust <- hclust(ebi_ipr_abundances_ss_bray, method="average")
+plot(ebi_ipr_abundances_ss_bray_hclust, main = "IPR")
+```
+
+Se observan dos grupos principales, uno de ellos es mucho mas grande y tiene bastantes subdivisiones, distribuidas de distinta forma que en GO.
+
+# ICM tables
+
+## Table reading ICM
+
+```{r}
+icm_cog_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_cog_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_kegg_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_kegg_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_pfam_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+```
+
+## NMDs
+
+### COG
+
+```{r}
+icm_cog_meta_bray <- vegdist(icm_cog_meta, method="bray")
+icm_cog_scg_bray <- vegdist(icm_cog_scg, method="bray")
+
+icm_cog_meta_bray.nmds <- monoMDS(icm_cog_meta_bray)
+icm_cog_scg_bray.nmds <- monoMDS(icm_cog_scg_bray)
+
+# MetaGS
+plot(icm_cog_meta_bray.nmds, main = "COG MetaGS")
+
+
+# SC
+plot(icm_cog_scg_bray.nmds, main = "COG SCG")
+
+```
+
+COG MetaGS: Se pueden observar 4 clusters distintos, tres de ellos cercanos y uno mas distante y sin relación.
+
+COG SCG: Se peuden observar 3 clusters, dos de ellos proximos y uno mas separado pero que aun parece mantener una relación.
+
+
+```{r}
+stressplot(icm_cog_meta_bray.nmds, main = "COG MetaGS")
+stressplot(icm_cog_scg_bray.nmds, main = "COG SCG")
+```
+
+
+### KEGG
+
+```{r}
+icm_kegg_meta_bray <-vegdist(icm_kegg_meta, method="bray") 
+icm_kegg_scg_bray <-vegdist(icm_kegg_scg, method="bray") 
+
+icm_kegg_meta_bray.nmds <- monoMDS(icm_kegg_meta_bray)
+icm_kegg_scg_bray.nmds <- monoMDS(icm_kegg_scg_bray)
+
+# MetaGS
+plot(icm_kegg_meta_bray.nmds, main = "KEGG MetaGS")
+
+
+# SC
+plot(icm_kegg_scg_bray.nmds, main = "KEGG SCG")
+```
+
+KEGG MetaGS: Se observan 4 clusters, en este caso parecen mejor separados, aunque dos de ellos son bastante proximos.
+
+KEGG SCG: Se observan 4 clusters, dos de ellos muy proximos, cerca otro y el cuarto parece bastante alejado.
+
+```{r}
+stressplot(icm_kegg_meta_bray.nmds, main = "KEGG MetaGS")
+stressplot(icm_kegg_scg_bray.nmds, main = "KEGG SCG")
+```
+
+### PFAM
+
+```{r}
+icm_pfam_meta_bray <-vegdist(icm_pfam_meta, method="bray") 
+icm_pfam_scg_bray <-vegdist(icm_pfam_scg, method="bray")
+
+icm_pfam_meta_bray.nmds <- monoMDS(icm_pfam_meta_bray)
+icm_pfam_scg_bray.nmds <- monoMDS(icm_pfam_scg_bray)
+
+# MetaGS
+plot(icm_pfam_meta_bray.nmds, main = "PFAM MetaGS")
+
+
+# SC
+plot(icm_pfam_scg_bray.nmds, main = "PFAM SCG")
+
+```
+
+PFAM MetaGS: En este caso los clusters no estan tan bien definidos, pero se pueden llegar a distinguir 4, dos muy cercanos, un tercero que mantiene relacion y el cuarto totalmente aislado.
+
+PFAM SCG: Se observan 4 clusters, dos de ellos casi solapados, el tercero bastante cerca (mas que en los casos anteriores) y el cuarto aislado.
+
+```{r}
+stressplot(icm_pfam_meta_bray.nmds, main = "PFAM MetaGS")
+stressplot(icm_pfam_scg_bray.nmds, main = "PFAM SCG")
+```
+
+## Dendograms
+
+### COG
+
+```{r}
+icm_cog_meta_bray_hclust <- hclust(icm_cog_meta_bray, method="average")
+plot(icm_cog_meta_bray_hclust, main = "COG MetaGS")
+
+icm_cog_scg_bray_hclust <- hclust(icm_cog_scg_bray, method="average")
+plot(icm_cog_scg_bray_hclust, main = "COG SCG")
+
+```
+
+COG MetaGS: Se observan dos grupos principales que, a su vez, tienen dos subgrupos. Concuerda con los 4 clusters.
+
+COG SCG: Se observan dos grupos principales, uno de ellos parece tener una subdivision importante, en el otro parece no ser tan importante. Concuerda con los clusters.
+
+### KEGG
+
+```{r}
+icm_kegg_meta_bray_hclust <-hclust(icm_kegg_meta_bray, method="average")
+plot(icm_kegg_meta_bray_hclust, main = "KEGG MetaGS")
+
+icm_kegg_scg_bray_hclust <-hclust(icm_kegg_scg_bray, method="average")
+plot(icm_kegg_scg_bray_hclust, main = "KEGG SCG")
+```
+
+KEGG MetaGS: Se pueden observar dos grupos principales y cada uno de ellos dividido en otros dos grupos principales. Concuerda con los clusters.
+
+KEGG SCG: Se pueden observar 2 grupos principales, divididos en otros dos grupos principales cada uno. Concuerda con los clusters.
+
+Muy parecidos a los obtenidos usando COG.
+
+### PFAM
+
+```{r}
+icm_pfam_meta_bray_hclust <-hclust(icm_pfam_meta_bray, method="average")
+plot(icm_pfam_meta_bray_hclust, main = "PFAM MetaGS")
+
+icm_pfam_scg_bray_hclust <-hclust(icm_pfam_scg_bray, method="average")
+plot(icm_pfam_scg_bray_hclust, main = "PFAM SCG")
+
+```
+
+PFAM MetaGS: Se pueden observar 2 grupos principales, divididos en otros dos grupos principales cada uno, pero a partir de ahi las divisiones son muy cortas, familias proximas.
+
+PFAM SCG: En este caso, despues de la division principal, en uno de los grupos se puede observar que las relaciones son muy cercanas.
+
+En ambos casos concuerda con los clusters poco definidos, que implican familias próximas.
+
+## Conclusion EBI vs ICM
+
+En ambos casos los NMDs coinciden con los dendogramas, son coherentes. Por otra parte, los datos obtenidos por el ICM tienen mucha mas capacidad para clasificar en diferentes familias o genes y manteniendo la coherencia entre NMDS y dendogramas. 
+
+Por tanto, considero que el tratamiento/pipeline utilizada en el ICM, con la finalidad de clasificación, es bastante más útil que la usada en el IBM, Mgnify.
+
+
+
+
+# OTU tables MiTags
+
+
+```{r}
+otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, sep = "\t"))
+otu_mitags$OTUId <- NULL
+otu_mitags <- t(otu_mitags)
+```
+
+## Richness
+
+```{r}
+otu_mitags_ss <- rrarefy(otu_mitags, min(rowSums(otu_mitags)))
+richness <- estimateR(otu_mitags_ss)
+richness
+```
+
+## Rarefaction
+
+```{r}
+#otu_rare <- rarefaction(otu_mitags_ss)
+```
+
+No he sido capaz de correr este plot.
+
+## Rarecurve
+
+```{r}
+#otu_rcurve <- rarecurve(otu_mitags_ss)
+```
+
+## Acumulation curve
+
+```{r}
+#otu_acc <- specaccum(otu_mitags_ss, method = "exact", permutations = 1000)
+#plot(otu_acc)
+```
+
+## Eveness
+
+```{r}
+plot(radfit(colSums(otu_mitags_ss)))
+```
+
+## Preston fit
+
+```{r}
+otu_preston<-prestonfit(colSums(otu_mitags_ss))
+otu_prestondistr<-prestondistr(colSums(otu_mitags_ss))
+plot(otu_preston)
+lines(otu_prestondistr, line.col="blue3")
+```
+
+## NMDS
+
+```{r}
+otu_mitags_ss_bray <- vegdist(otu_mitags_ss, method="bray")
+otu_mitags_ss_bray.nmds <- monoMDS(otu_mitags_ss_bray)
+
+otu_mitags_ss_bray.nmds
+plot(otu_mitags_ss_bray.nmds, main = "MiTags")
+stressplot(otu_mitags_ss_bray.nmds, main = "MiTags")
+```
+
+## UPGMA
+
+```{r}
+otu_mitags_ss_hclust <- hclust(otu_mitags_ss_bray, "average")
+plot(otu_mitags_ss_hclust)
+otu_mitags_ss_hclust
+```
+
+## DCA
+
+```{r}
+otu_dca <- decorana(otu_mitags_ss)
+plot(otu_dca, display = "sites")
+plot(otu_dca, display = "species")
+```
+
+## Mantel test
+
+```{r}
+otu_mitags_bray <- vegdist(otu_mitags, method="bray")
+plot(otu_mitags_ss_bray,otu_mitags_bray)
+abline(0,1, col = "red")
+mantel(otu_mitags_ss_bray,otu_mitags_bray)
+```
+
+Una buena correlación implica que el subsampling es correcto y que no afecta negativamente al analysis.
+
+
+## Conclusión ITags vs MiTags
+
+Comparando los plots obtenidos por MiTags e ITags (16S), puedo ver diferencias, pero no sabria interpretarlas.
+
+Ahora bien, leyendo y utilizando el paper "Metagenomic 16S rDNA Illumina tags are a powerfulalternative to amplicon sequencing to explore diversityand structure of microbial communities", se puede deducir que usando MiTags la detección de OTUs es mas óptima.
+
+
+```{r include=FALSE}
+rarefaction<-function(x,subsample=1000, plot=TRUE, color=TRUE, error=FALSE, legend=TRUE, symbol){
+
+        library(vegan)
+        x <- as.matrix(x)
+	y1<-apply(x, 1, sum)
+        rare.data<-x                                   
+
+        select<-unique(sort(c((apply(x, 1, sum)), (seq(0,(max(y1)), by=subsample)), recursive=TRUE)))
+        storesummary.e<-matrix(data=NA, ncol=length(rare.data[,1]),nrow=length(select))
+        rownames(storesummary.e)<-c(select)
+        colnames(storesummary.e)<-rownames(x)
+        storesummary.se<-matrix(data=NA, ncol=length(rare.data[,1]),nrow=length(select))
+        rownames(storesummary.se)<-c(select)
+        colnames(storesummary.se)<-rownames(x)
+
+                for(i in 1:length(select))                      #the for loop
+                        {
+                        select.c<-select[i]                     #assigns the 'i'th element of select to select.c
+                        foo<-rarefy(x,select.c, se=T)           #use whatever vegan fn you want
+                storesummary.e[i,]<-foo[1,]
+                storesummary.se[i,]<-foo[2,]            
+                        }
+                storesummary.e<-as.data.frame(storesummary.e)               
+                richness.error<<-storesummary.se
+                
+for (i in 1:(length(storesummary.e)))
+{
+storesummary.e[,i]<-ifelse(select>sum(x[i,]), NA, storesummary.e[,i])
+}
+
+###############plot result################################
+if (plot==TRUE)
+ {
+if(color==TRUE){
+plot(select,storesummary.e[,1], xlab="Individuals in Subsample", 
+xlim=c(0,max(select)), ylim=c(0, 5+(max(storesummary.e[,1:(length(storesummary.e))], na.rm=TRUE))),
+ylab="Mean Species Richness", pch =16, col=2, type="n")
+
+for (j in 1:(length(storesummary.e))){
+points(select, storesummary.e[,j], pch=16, col=j+1, type="b", lty=1)}
+
+if(error==TRUE){
+for (m in 1:(length(storesummary.e))){
+segments(select, storesummary.e[,m]+storesummary.se[,m],select, storesummary.e[,m]-storesummary.se[,m])
+}
+}
+if (legend==TRUE){
+legend("bottomright", colnames(storesummary.e), inset=0.05, lty=1, col=1:length(storesummary.e)+1, lwd=2)
+}
+}
+else
+{
+plot(select,storesummary.e[,1], xlab="Individuals in Subsample", 
+xlim=c(0,max(select)), ylim=c(0, 5+(max(storesummary.e[,1:(length(storesummary.e))], na.rm=TRUE))),
+ylab="Mean Species Richness", pch =16, col=2, type="n")
+
+for (j in 1:(length(storesummary.e))){
+points(select, storesummary.e[,j], type="l", lty=1)}
+
+for (k in 1:(length(storesummary.e))){
+symbol<-ifelse(symbol<length(storesummary.e),rep(symbol,2),symbol)
+points(as.numeric(rownames(subset(storesummary.e, storesummary.e[,k]==max(storesummary.e[,k],na.rm=TRUE)))), max(storesummary.e[,k],na.rm=TRUE), pch=symbol[k], cex=1.5)}
+
+if(error==TRUE){
+for (m in 1:(length(storesummary.e))){
+points(select, storesummary.e[,m]+storesummary.se[,m], type="l", lty=2)
+points(select, storesummary.e[,m]-storesummary.se[,m], type="l", lty=2)}}
+
+k<-1:(length(storesummary.e))
+if (legend==TRUE){
+legend("bottomright", colnames(storesummary.e), pch=symbol[k], inset=0.05, cex=1.3)
+}
+}
+}
+print("rarefaction by J. Jacobs, last update April 17, 2009")
+if(error==TRUE)(print("errors around lines are the se of the iterations, not true se of the means")  )     
+list("richness"= storesummary.e, "SE"=richness.error, "subsample"=select)        
+ 
+}
+```
+
+
+
+
+
