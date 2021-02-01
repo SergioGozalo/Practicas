@@ -3,6 +3,7 @@ title: "Function representation"
 author: "Sergio Gozalo"
 date: "29 de enero de 2021"
 output: html_document
+keep_md: true
 ---
 
 ```{r setup, include=FALSE}
