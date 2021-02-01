@@ -139,4 +139,4 @@ p
 ggsave(path = "/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables/", filename = "KEGG_figure.png", device = "tiff", dpi = 700)
 ```
 
-    ## Saving 7 x 5 in image
+    ## Saving 7 x 7 in image
