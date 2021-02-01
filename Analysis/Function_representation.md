@@ -139,6 +139,6 @@ ggsave(path = "/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables
 
     ## Saving 7 x 5 in image
 
-<img src="Figures/KEGG_figure.png" />
-
-![](Figures/KEGG_figure.png)
+    ## Warning in grDevices::dev.off(): unable to open TIFF file '/Users/Usuario/
+    ## Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables//
+    ## KEGG_figure.png'
