@@ -139,4 +139,4 @@ ggsave(path = "/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables
 
     ## Saving 7 x 5 in image
 
-![](functional.tables/KEGG_figure.png)
+![](functional.tables/KEGG_figure.png) <img src="functional.tables/KEGG_figure.png" />
