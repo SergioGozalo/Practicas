@@ -1,4 +1,4 @@
 # Practicas
 
-## Functional tables: 
-Contains the metagenomic analysis (.rmd and .html) and the tables used.
+## Analysis: 
+Contains the metagenomic analysis (.rmd and .html), the function representation and the tables used.
