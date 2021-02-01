@@ -128,15 +128,15 @@ kegg_by_sample <- melt(kegg_by_sample, id.vars = "PClass")
 
 # Plots
 pale <- distinctColorPalette(30)
-p <- ggplot(kegg_by_sample, aes(x=variable, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG class") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
-
-p
+ggplot(kegg_by_sample, aes(x=variable, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG class") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
 ![](Function_representation_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 ``` r
-ggsave(path = "/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables/", filename = "KEGG_figure.png", device = "tiff", dpi = 700)
+ggsave(path = "/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables/", filename = "KEGG_figure.png", device = "tiff", dpi = 400)
 ```
 
-    ## Saving 7 x 7 in image
+    ## Saving 7 x 5 in image
+
+![](functional.tables/KEGG_figure.png)
