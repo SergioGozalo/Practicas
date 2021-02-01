@@ -132,13 +132,3 @@ ggplot(kegg_by_sample, aes(x=variable, y = value, fill = PClass)) + geom_bar(pos
 ```
 
 ![](Function_representation_files/figure-markdown_github/unnamed-chunk-4-1.png)
-
-``` r
-ggsave(path = "/Users/Usuario/Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables/", filename = "KEGG_figure.png", device = "tiff", dpi = 300)
-```
-
-    ## Saving 7 x 5 in image
-
-    ## Warning in grDevices::dev.off(): unable to open TIFF file '/Users/Usuario/
-    ## Desktop/Bioinformatica/Practicas/Functional_tables/functional.tables//
-    ## KEGG_figure.png'
