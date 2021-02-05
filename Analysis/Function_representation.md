@@ -58,6 +58,7 @@ f_kegg_meta <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthN
 f_kegg_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
 ekey <- read.table("functional.tables/ekey.txt")
+slim <- read.table("functional.tables/GO.slim.txt")
 ```
 
 ``` r
@@ -137,6 +138,9 @@ ggplot(kegg_by_sample, aes(x=variable, y = value, fill = PClass)) + geom_bar(pos
 f_go.slim_abundances <- tibble::rownames_to_column(f_go.slim_abundances, "GO")
 f_go.slim_abundances[1] <- NULL
 f_go.slim_abundances[2] <- NULL
+l <- "description"
+l<- c(l,slim$V3)
+colnames(f_go.slim_abundances) <- l
 f_go.slim_abundances <- melt(f_go.slim_abundances, id.vars = "description")
 ```
 
