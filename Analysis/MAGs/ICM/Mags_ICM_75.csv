@@ -1,0 +1,77 @@
+Bin ID;Taxonomy (GTDB-Tk);Highest taxonomy (SILVA v132);Marker lineage;# genomes;# markers;# marker sets;0;1;2;3;4;5+;Completeness;Contamination;Strain heterogeneity;Size (M);# contigs;Total length (bp);Largest contig (bp);GC (%);N50
+;;;;;;;;;;;;;;;;;;;;;
+bin.33;Flavobacteriales;Flavobacteriales;k__Bacteria (UID2569);434;278;186;2;275;1;0;0;0;99.46;0.54;0.00;2.6;19;2585557;317403;42.26;249809
+bin.107;Coraliomargarita;Coraliomargarita;k__Bacteria (UID2982);88;230;148;1;227;2;0;0;0;99.32;1.35;0.00;2.0;43;2008752;290283;51.62;82056
+bin.53;Phycisphaerales;-;k__Bacteria (UID2565);2921;143;88;1;140;2;0;0;0;98.86;1.70;0.00;3.3;136;3334765;180678;63.22;45756
+bin.20;Verrucomicrobiales;Verrucomicrobia;k__Bacteria (UID2982);88;229;147;4;222;3;0;0;0;97.96;1.70;0.00;7.0;232;7143851;200536;54.11;57179
+bin.82;Planctomycetota;-;k__Bacteria (UID2565);2921;143;88;2;139;2;0;0;0;97.73;1.70;0.00;5.3;364;5366495;129866;63.02;24346
+bin.137;Planctomycetota;-;k__Bacteria (UID2565);2921;143;88;2;139;2;0;0;0;97.73;1.70;0.00;5.1;332;5177343;129866;63.07;25036
+bin.105;Pedosphaerales;-;k__Bacteria (UID2982);88;230;148;5;223;2;0;0;0;96.62;1.35;0.00;4.2;216;4278935;111618;47.86;30958
+bin.98;Cyclobacteriaceae;-;o__Cytophagales (UID2936);47;454;336;20;428;6;0;0;0;94.73;1.55;33.33;4.0;214;4021863;128754;41.70;29021
+bin.42;Betaproteobacteriales;Nitrosomonadaceae;p__Proteobacteria (UID3880);1495;261;164;10;251;0;0;0;0;94.51;0.00;0.00;1.8;36;1765646;138700;44.15;77467
+bin.84;Myxococcota;Deltaproteobacteria;k__Bacteria (UID3187);2258;190;119;8;168;13;1;0;0;94.12;1.68;6.25;4.7;271;4841421;100472;59.25;26273
+bin.132;Cyclobacteriaceae;-;o__Cytophagales (UID2936);47;454;336;27;418;6;1;2;0;93.24;3.73;9.52;4.7;277;4834005;128754;42.47;26595
+bin.32;Porticoccus (Gammaproteobacteria);Alphaproteobacteria;c__Gammaproteobacteria (UID4443);356;451;270;23;424;4;0;0;0;93.06;1.48;25.00;1.3;20;1261563;196296;36.92;115583
+bin.63;Opitutaceae;Pelagicoccus;k__Bacteria (UID2982);88;230;148;14;211;5;0;0;0;93.02;2.73;0.00;3.8;158;3857234;190879;50.19;41621
+bin.72;Pirellulaceae;Blastopirellula;k__Bacteria (UID2565);2921;140;85;20;120;0;0;0;0;92.73;0.00;0.00;5.0;443;5054885;59589;48.22;14977
+bin.109;Pseudomonadales;Gammaproteobacteria;c__Gammaproteobacteria (UID4443);356;451;270;25;415;11;0;0;0;92.41;2.72;0.00;3.6;66;3669792;276377;50.92;78517
+bin.89;Pseudomonadales;Gammaproteobacteria;c__Gammaproteobacteria (UID4443);356;451;270;24;418;9;0;0;0;92.36;2.27;0.00;4.5;182;4599467;273020;52.36;52328
+bin.21;Planctomycetota;Planctomycetes, Pla_3;k__Bacteria (UID2565);2921;152;93;9;141;2;0;0;0;91.87;1.61;0.00;2.7;147;2741568;108328;49.87;30443
+bin.110;Rubripirellula;Phycisphaerales;k__Bacteria (UID2565);2921;140;85;16;123;1;0;0;0;91.20;1.18;0.00;6.2;447;6315940;96221;51.76;20904
+bin.111;Opitutales;-;k__Bacteria (UID2982);88;230;148;21;195;14;0;0;0;90.20;6.53;0.00;4.2;238;4311969;65196;48.67;22083
+bin.22;Verrucomicrobiales;-;k__Bacteria (UID2982);88;229;147;17;212;0;0;0;0;89.80;0.00;0.00;3.4;283;3440041;89372;49.00;16842
+bin.131;Pseudomonadales;-;c__Gammaproteobacteria (UID4443);356;451;270;40;400;11;0;0;0;89.77;2.32;9.09;1.9;243;1920840;34384;43.12;10714
+bin.80;Myxococcota;Bdellovibrionaceae, OM27;k__Bacteria (UID3187);2258;190;119;58;128;4;0;0;0;89.57;2.80;25.00;7.2;629;7413773;77392;64.96;15851
+bin.4;Litoricola;Litoricola;c__Gammaproteobacteria (UID4443);356;451;270;93;353;5;0;0;0;89.07;1.33;20.00;1.9;126;1936184;64408;50.39;28021
+bin.118;Myxococcota;-;c__Deltaproteobacteria (UID3216);83;247;155;20;222;5;0;0;0;89.03;2.26;20.00;4.9;407;4999876;156296;62.16;16887
+bin.115;Porticoccaceae (Gammaproteobacteria);Salinivibrio (Gammaproteobacteria);c__Gammaproteobacteria (UID4443);356;451;270;63;384;4;0;0;0;88.95;1.05;25.00;1.3;109;1249368;70074;42.15;16479
+bin.127;Actinobacteria;Actinobacteria, PeM15;o__Actinomycetales (UID1663);488;310;185;28;269;11;2;0;0;88.71;3.65;11.76;2.1;211;2107177;79019;61.63;15169
+bin.69;Puniceispirillaceae;-;c__Alphaproteobacteria (UID3305);564;347;229;45;296;6;0;0;0;87.69;2.62;16.67;2.1;298;2095904;33461;57.40;8718
+bin.39;Rhodobacteraceae;-;c__Alphaproteobacteria (UID3337);468;388;250;46;338;4;0;0;0;86.49;1.03;25.00;4.3;500;4329514;81083;57.36;10700
+bin.64;Rhizobiales;-;c__Alphaproteobacteria (UID3305);564;349;230;55;287;5;1;1;0;86.08;2.32;7.14;1.3;99;1238751;66226;33.00;19282
+bin.25;Pseudomonadales;-;c__Gammaproteobacteria (UID4444);263;507;232;72;430;5;0;0;0;84.85;0.79;20.00;1.8;208;1802431;34384;43.04;11348
+bin.122;Synechococcus;-;p__Cyanobacteria (UID2143);129;472;368;91;358;23;0;0;0;84.84;4.98;26.09;2.0;235;2005957;47445;58.96;11868
+bin.117;Flavobacteriales;-;k__Bacteria (UID2569);434;278;186;36;230;10;1;1;0;84.46;6.47;15.79;2.4;164;2419109;55966;33.94;19096
+bin.58;Cyclobacteriaceae;-;o__Cytophagales (UID2936);47;454;336;82;370;2;0;0;0;83.90;0.60;0.00;2.3;153;2325409;61622;37.88;20215
+bin.94;Planctomycetota;-;k__Bacteria (UID2565);2921;143;88;17;126;0;0;0;0;83.52;0.00;0.00;4.1;495;4120568;45739;56.01;10676
+bin.17;Flavobacteriaceae;-;k__Bacteria (UID2566);525;208;136;34;172;2;0;0;0;81.95;0.76;0.00;1.7;158;1747604;39565;36.23;14475
+bin.91;Porticoccaceae;SAR 86;c__Gammaproteobacteria (UID4443);356;451;270;84;363;4;0;0;0;81.30;0.74;0.00;2.0;64;1960642;129823;43.19;63723
+bin.87;Rhizobiales (Alphaproteobacteria);Parvibaculales (Alphaproteobacteria);c__Alphaproteobacteria (UID3305);564;349;230;62;261;26;0;0;0;80.82;5.92;23.08;1.3;144;1292519;79799;32.81;12010
+bin.56;Parvibaculales;-;c__Alphaproteobacteria (UID3305);564;349;230;101;247;1;0;0;0;78.28;0.14;0.00;1.3;140;1237920;44605;46.34;11629
+bin.106;Thermoplasmatota;-;p__Euryarchaeota (UID3);148;188;125;40;135;11;2;0;0;77.60;6.92;17.65;1.9;184;1902169;78660;51.56;17408
+bin.49;Kiritimatiellales;Kiritimatiellaceae;k__Bacteria (UID2982);88;230;148;43;186;1;0;0;0;77.20;0.03;0.00;1.3;73;1283468;56024;48.63;26203
+bin.134;Microtrichales;-;k__Bacteria (UID1453);901;171;117;36;128;6;1;0;0;75.83;5.65;22.22;3.6;512;3675296;64019;64.44;8996
+bin.93;Rhodobacteraceae;-;f__Rhodobacteraceae (UID3340);84;568;330;113;426;21;4;1;3;74.88;8.09;10.81;3.5;230;3536146;85518;40.71;24396
+bin.40;Microtrichales;"Microtrichaceae;Sva0996";k__Bacteria (UID1453);901;171;117;60;110;1;0;0;0;74.79;0.43;0.00;1.3;77;1306357;69590;44.88;22307
+bin.7;Phycisphaerales;"Phycisphaeraceae;CL500-3";k__Bacteria (UID2565);2921;143;88;36;103;4;0;0;0;74.69;2.09;25.00;2.8;470;2859658;33920;66.28;6785
+bin.102;Luminiphilus;-;c__Gammaproteobacteria (UID4444);263;498;228;109;372;15;2;0;0;74.31;3.11;28.57;1.9;389;1946662;24713;52.78;6133
+bin.92;Microtrichales;Bdellovibrio;k__Bacteria (UID1453);901;171;117;40;128;3;0;0;0;73.93;2.14;33.33;2.7;370;2710018;64019;64.53;9380
+bin.100;Pseudohongiellaceae;-;c__Gammaproteobacteria (UID4443);356;451;270;118;331;2;0;0;0;71.23;0.31;0.00;2.7;79;2780207;263335;43.94;72508
+bin.90;Gammaproteobacteria;Methylonatrum;c__Gammaproteobacteria (UID4201);1164;275;174;66;207;2;0;0;0;70.26;0.77;0.00;1.2;83;1188924;50146;39.70;23464
+bin.37;Pseudomonadales;-;c__Gammaproteobacteria (UID4443);356;451;270;147;300;4;0;0;0;69.05;1.05;25.00;2.1;397;2090032;20386;48.88;5707
+bin.120;Microtrichales;"Microtrichaceae;Sva0996";k__Bacteria (UID203);5449;104;58;59;44;1;0;0;0;68.97;1.72;0.00;0.866;31;870821;130479;43.09;38321
+bin.104;Flavobacteriaceae;-;k__Bacteria (UID203);5449;104;58;58;46;0;0;0;0;67.24;0.00;0.00;1.1;74;1037393;46611;39.54;19090
+bin.83;Flavobacteriaceae;-;k__Bacteria (UID2569);434;278;186;94;182;2;0;0;0;66.49;1.08;0.00;1.3;141;1308444;32010;55.75;10599
+bin.71;Thermoplasmatota;-;p__Euryarchaeota (UID3);148;188;125;61;104;23;0;0;0;66.04;8.35;17.39;1.3;93;1308705;47135;47.08;16958
+bin.133;Flavobacteriales;-;k__Bacteria (UID2569);434;278;186;98;171;9;0;0;0;65.09;0.91;0.00;0.1012;184;1010558;19608;33.30;5996
+bin.5;Thermoplasmatota;-;p__Euryarchaeota (UID3);148;188;125;88;100;0;0;0;0;64.53;0.00;0.00;1.2;48;1163786;146846;35.69;46387
+bin.103;Thermoplasmatota;-;p__Euryarchaeota (UID3);148;188;125;59;115;14;0;0;0;63.66;5.26;28.57;1.5;229;1455074;35759;51.50;7384
+bin.48;Alphaproteobacteria;-;k__Bacteria (UID2565);2921;152;93;74;72;6;0;0;0;63.47;5.91;33.33;1.4;229;1380483;29789;29.33;6860
+bin.77;Crocinitomicaceae;-;k__Bacteria (UID2569);434;277;185;82;194;1;0;0;0;62.41;0.18;0.00;1.4;210;1383393;28456;37.92;7328
+bin.136;Nitrosopumilus;-;k__Archaea (UID2);207;145;103;62;83;0;0;0;0;61.81;0.00;0.00;0.797;124;797137;25170;31.07;8387
+bin.114;Nitrosopumilus;Nitrosopumilus;k__Archaea (UID2);207;145;103;63;82;0;0;0;0;60.84;0.00;0.00;0.761;118;764518;25170;31.03;8387
+bin.14;Crocinitomicaceae;-;k__Bacteria (UID2569);434;277;185;101;174;2;0;0;0;59.51;1.08;0.00;1.5;102;1528212;61964;35.86;21791
+bin.10;Microtrichales;"Microtrichaceae;Sva0996";k__Bacteria (UID203);5449;104;58;66;38;0;0;0;0;59.48;0.00;0.00;1.4;108;1357794;146059;51.53;25511
+bin.11;Flavobacteriaceae;-;k__Bacteria (UID203);5449;104;58;62;41;0;1;0;0;58.09;3.45;33.33;0.880;144;883949;33145;38.97;6857
+bin.101;Pseudomonadales;-;c__Gammaproteobacteria (UID4443);356;451;270;190;255;6;0;0;0;56.71;1.16;33.33;2.1;405;2059793;22200;52.07;5348
+bin.47;Rhodobacteraceae;-;k__Bacteria (UID2569);434;278;186;123;145;10;0;0;0;56.22;3.33;10.00;1.5;291;1501413;21058;39.96;5459
+bin.81;Luminiphilus;-;k__Bacteria (UID203);5449;104;58;61;43;0;0;0;0;56.21;0.00;0.00;1.2;177;1132971;21452;52.51;7552
+bin.73;Sphingobium;Sphingobium;o__Sphingomonadales (UID3310);26;569;293;293;271;4;1;0;0;54.35;1.56;28.57;3.5;1293;3571730;15796;61.77;3448
+bin.1;SAR86;-;k__Bacteria (UID203);5449;104;58;31;53;12;8;0;0;53.45;7.52;2.78;0.499;62;502352;67454;35.18;10779
+bin.61;Pseudomonadales;"Halieaceae;OM60(NOR5)";c__Gammaproteobacteria (UID4443);356;451;270;214;230;6;1;0;0;52.95;2.41;11.11;1.8;364;1773273;15635;52.41;4989
+bin.129;Vibrio;-;g__Vibrio (UID4874);71;1067;378;440;621;6;0;0;0;52.64;0.87;0.00;2.3;549;2308192;12861;41.84;4216
+bin.29;Vibrio;Vibrio;g__Vibrio (UID4874);71;1067;378;448;613;6;0;0;0;52.64;0.83;16.67;2.3;552;2286265;12861;41.89;4242
+bin.86;Cyanobiaceae;-;p__Cyanobacteria (UID2143);129;472;368;216;247;9;0;0;0;52.09;1.94;22.22;1.1;227;1114308;21862;61.92;5249
+bin.55;Puniceispirillaceae;SAR116;c__Alphaproteobacteria (UID3305);564;347;229;159;188;0;0;0;0;51.91;0.00;0.00;1.3;231;1286586;26251;47.53;6284
+bin.60;Pedosphaerales;-;k__Bacteria (UID2982);88;230;148;105;124;1;0;0;0;51.08;0.03;0.00;1.6;321;1582366;25163;56.85;5194
+bin.27;Opitutales;"Puniceicoccaceae;MB11C04";k__Bacteria (UID2982);88;230;148;101;103;17;9;0;0;50.34;9.85;31.82;1.3;159;1276190;47717;41.67;10644
