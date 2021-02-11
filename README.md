@@ -1,4 +1,4 @@
 # Practicas
 
 ## Analysis: 
-Contains the metagenomic analysis (.rmd and .md), the function representation and the tables used.
+General folder that contains all the R analysis and the data used.
