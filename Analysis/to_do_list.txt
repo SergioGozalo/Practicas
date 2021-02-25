@@ -1,0 +1,5 @@
+-Comparacion entre tablas de funciones
+-Comparacion entre pipelines
+-Clasificaciones taxonomicas, correlacionar taxonomia con funciones
+-Analizar tratamientos: Numero de funciones por tratamiento, taxa por tratamiento (no acabo de entender)
+-MAGs: comparar ICM vs EBI

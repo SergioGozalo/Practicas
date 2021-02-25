@@ -1,0 +1,112 @@
+---
+title: "ICM Pipeline Comparisson"
+author: "Sergio Gozalo"
+date: "25 de febrero de 2021"
+output: 
+  github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Practicas/Practicas/Analysis/"))
+```
+
+## Loading necessary libraries
+
+```{r}
+library("vegan")
+library("ggplot2")
+library("tidyr")
+library("dplyr")
+```
+
+
+## Table reading
+
+```{r}
+icm_cog_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_cog_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_kegg_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_kegg_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_pfam_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+```
+
+## Bray-Curtis dissmilarity matrix
+
+```{r}
+#COG
+icm_cog_meta_bray <- vegdist(icm_cog_meta, method="bray")
+icm_cog_scg_bray <- vegdist(icm_cog_scg, method="bray")
+
+#KEGG
+icm_kegg_meta_bray <-vegdist(icm_kegg_meta, method="bray") 
+icm_kegg_scg_bray <-vegdist(icm_kegg_scg, method="bray") 
+
+#PFAM
+icm_pfam_meta_bray <-vegdist(icm_pfam_meta, method="bray") 
+icm_pfam_scg_bray <-vegdist(icm_pfam_scg, method="bray")
+```
+
+# MetaGSize vs SCG
+
+## Comparing MetaGSize and SCG normalizations
+
+```{r}
+#Plots
+plot(icm_cog_meta_bray, icm_cog_scg_bray, main = "COG: metaGsize vs SCG")
+abline(0,1)
+
+plot(icm_kegg_meta_bray, icm_kegg_scg_bray, main = "KEGG: metaGsize vs SCG")
+abline(0,1)
+
+plot(icm_pfam_meta_bray, icm_pfam_scg_bray, main = "PFAM: metaGsize vs SCG")
+abline(0,1)
+
+#Mantel test for correlation
+mantel(icm_cog_meta_bray, icm_cog_scg_bray)
+mantel(icm_kegg_meta_bray, icm_kegg_scg_bray)
+mantel(icm_pfam_meta_bray, icm_pfam_scg_bray)
+```
+
+Both, plots and mantel tests, show a very high positive correlation.
+
+## Comparisson of MetaGSize from different tables
+
+```{r}
+#Plots
+plot(icm_cog_meta_bray, icm_kegg_meta_bray, main = "COG-meta vs KEGG-meta")
+abline(0,1)
+plot(icm_cog_meta_bray, icm_pfam_meta_bray, main = "COG-meta vs PFAM-meta")
+abline(0,1)
+plot(icm_pfam_meta_bray, icm_kegg_meta_bray, main = "PFAM-meta vs KEGG-meta")
+abline(0,1)
+
+#Mantel test for correlation
+mantel(icm_cog_meta_bray, icm_kegg_meta_bray)
+mantel(icm_cog_meta_bray, icm_pfam_meta_bray)
+mantel(icm_pfam_meta_bray, icm_kegg_meta_bray)
+```
+
+Again, plots and mantel tests shows high correlation, that implies that results are consistent since different databases provide very similar results
+
+## Comparisson of SCG from different tables
+
+```{r}
+#Plots
+plot(icm_cog_scg_bray, icm_kegg_scg_bray, main = "COG-SCG vs KEGG-SCG")
+abline(0,1)
+plot(icm_cog_scg_bray, icm_pfam_scg_bray, main = "COG-SCG vs PFAM-SCG")
+abline(0,1)
+plot(icm_pfam_scg_bray, icm_kegg_scg_bray, main = "PFAM-SCG vs KEGG-SCG")
+abline(0,1)
+
+#Mantel test for correlation
+mantel(icm_cog_scg_bray, icm_pfam_scg_bray)
+mantel(icm_cog_scg_bray, icm_kegg_scg_bray)
+mantel(icm_pfam_scg_bray, icm_kegg_scg_bray)
+```
+
+Once more, results show very high correlation, in this case is even greater than in the metaGSize.
