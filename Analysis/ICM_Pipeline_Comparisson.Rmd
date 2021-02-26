@@ -110,3 +110,7 @@ mantel(icm_pfam_scg_bray, icm_kegg_scg_bray)
 ```
 
 Once more, results show very high correlation, in this case is even greater than in the metaGSize.
+
+## Conclusion
+
+The results of all databases from the ICM pipeline are very similar and consistent.

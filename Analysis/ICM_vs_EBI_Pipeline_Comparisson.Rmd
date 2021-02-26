@@ -1,0 +1,119 @@
+---
+title: "ICM_vs_EBI_Pipeline_Comparisson"
+author: "Sergio Gozalo"
+date: "26 de febrero de 2021"
+output: 
+  github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Practicas/Practicas/Analysis/"))
+```
+
+## Loading necessary libraries
+
+```{r}
+library("vegan")
+library("ggplot2")
+library("tidyr")
+library("dplyr")
+```
+
+## Table reading
+
+```{r}
+# EBI
+ebi_go_abundances <- read.table("functional.tables/ERP112966_GO_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_go_abundances$description <- NULL #Need to remove this column to work
+ebi_go_abundances$category <- NULL #Need to remove this column to work
+ebi_go_abundances <- t(ebi_go_abundances)
+
+ebi_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_go.slim_abundances$description <- NULL
+ebi_go.slim_abundances$category <- NULL
+ebi_go.slim_abundances <- t(ebi_go.slim_abundances)
+
+ebi_ipr_abundances <- read.table("functional.tables/ERP112966_IPR_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_ipr_abundances$description <- NULL
+ebi_ipr_abundances$category <- NULL
+ebi_ipr_abundances <- t(ebi_ipr_abundances)
+
+#ICM
+icm_cog_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_cog_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_kegg_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_kegg_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_pfam_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+```
+
+## Bray-Curtis dissmilarity matrix
+
+```{r}
+# EBI
+ebi_go_abundances_bray <- vegdist(ebi_go_abundances, method="bray")
+
+ebi_go.slim_abundances_bray <- vegdist(ebi_go.slim_abundances, method="bray")
+
+ebi_ipr_abundances_bray <- vegdist(ebi_ipr_abundances, method="bray")
+
+#ICM
+icm_cog_meta_bray <- vegdist(icm_cog_meta, method="bray")
+icm_cog_scg_bray <- vegdist(icm_cog_scg, method="bray")
+
+icm_kegg_meta_bray <-vegdist(icm_kegg_meta, method="bray") 
+icm_kegg_scg_bray <-vegdist(icm_kegg_scg, method="bray") 
+
+icm_pfam_meta_bray <-vegdist(icm_pfam_meta, method="bray") 
+icm_pfam_scg_bray <-vegdist(icm_pfam_scg, method="bray")
+```
+
+## Comparisson ICM vs EBI
+
+### GO vs EBI
+
+```{r}
+# Plots
+plot(ebi_go_abundances_bray, icm_cog_meta_bray, main = "GO vs GO-SLIM")
+abline(0,1)
+
+plot(ebi_go_abundances_bray, icm_cog_scg_bray, main = "GO vs IPR")
+abline(0,1)
+
+plot(ebi_go_abundances_bray, icm_kegg_meta_bray, main = "GO-SLIM vs IPR")
+abline(0,1)
+
+plot(ebi_go_abundances_bray, icm_kegg_scg_bray, main = "GO vs GO-SLIM")
+abline(0,1)
+
+plot(ebi_go_abundances_bray, icm_pfam_meta_bray, main = "GO vs IPR")
+abline(0,1)
+
+plot(ebi_go_abundances_bray, icm_pfam_scg_bray, main = "GO-SLIM vs IPR")
+abline(0,1)
+
+#Mantel test for correlation
+mantel(ebi_go_abundances_bray, icm_cog_meta_bray)
+mantel(ebi_go_abundances_bray, icm_cog_scg_bray)
+mantel(ebi_go_abundances_bray, icm_kegg_meta_bray)
+mantel(ebi_go_abundances_bray, icm_kegg_scg_bray)
+mantel(ebi_go_abundances_bray, icm_pfam_meta_bray)
+mantel(ebi_go_abundances_bray, icm_pfam_scg_bray)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
