@@ -24,19 +24,24 @@ library("dplyr")
 
 ```{r}
 # EBI
+ebi_to_icm <- read.table("functional.tables/ebi_to_icm.txt")
+lista <- ebi_to_icm$V3
 ebi_go_abundances <- read.table("functional.tables/ERP112966_GO_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 ebi_go_abundances$description <- NULL #Need to remove this column to work
 ebi_go_abundances$category <- NULL #Need to remove this column to work
+colnames(ebi_go_abundances) <- lista
 ebi_go_abundances <- t(ebi_go_abundances)
 
 ebi_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 ebi_go.slim_abundances$description <- NULL
 ebi_go.slim_abundances$category <- NULL
+colnames(ebi_go.slim_abundances) <- lista
 ebi_go.slim_abundances <- t(ebi_go.slim_abundances)
 
 ebi_ipr_abundances <- read.table("functional.tables/ERP112966_IPR_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 ebi_ipr_abundances$description <- NULL
 ebi_ipr_abundances$category <- NULL
+colnames(ebi_ipr_abundances) <- lista
 ebi_ipr_abundances <- t(ebi_ipr_abundances)
 
 #ICM
@@ -77,22 +82,22 @@ icm_pfam_scg_bray <-vegdist(icm_pfam_scg, method="bray")
 
 ```{r}
 # Plots
-plot(ebi_go_abundances_bray, icm_cog_meta_bray, main = "GO vs GO-SLIM")
+plot(ebi_go_abundances_bray, icm_cog_meta_bray, main = "GO vs COG-META")
 abline(0,1)
 
-plot(ebi_go_abundances_bray, icm_cog_scg_bray, main = "GO vs IPR")
+plot(ebi_go_abundances_bray, icm_cog_scg_bray, main = "GO vs COG-SCG")
 abline(0,1)
 
-plot(ebi_go_abundances_bray, icm_kegg_meta_bray, main = "GO-SLIM vs IPR")
+plot(ebi_go_abundances_bray, icm_kegg_meta_bray, main = "GO-SLIM vs KEGG-META")
 abline(0,1)
 
-plot(ebi_go_abundances_bray, icm_kegg_scg_bray, main = "GO vs GO-SLIM")
+plot(ebi_go_abundances_bray, icm_kegg_scg_bray, main = "GO vs KEGG-SCG")
 abline(0,1)
 
-plot(ebi_go_abundances_bray, icm_pfam_meta_bray, main = "GO vs IPR")
+plot(ebi_go_abundances_bray, icm_pfam_meta_bray, main = "GO vs PFAM-META")
 abline(0,1)
 
-plot(ebi_go_abundances_bray, icm_pfam_scg_bray, main = "GO-SLIM vs IPR")
+plot(ebi_go_abundances_bray, icm_pfam_scg_bray, main = "GO-SLIM vs PFAM-SCG")
 abline(0,1)
 
 #Mantel test for correlation

@@ -1,5 +1,8 @@
--Comparacion entre tablas de funciones
--Comparacion entre pipelines
--Clasificaciones taxonomicas, correlacionar taxonomia con funciones
+-Comparacion entre tablas de funciones. **Entre las de la misma pipeline esta hecho
+
+-Comparacion entre pipelines. **Entre las dos pipelines hay que mejorar.
+
+-Clasificaciones taxonomicas, correlacionar taxonomia con funciones **En icm usar SCG porque interpreta mejor la abundancia celular.
+	*Para cog ya estan todas las tablas preparadas
 -Analizar tratamientos: Numero de funciones por tratamiento, taxa por tratamiento (no acabo de entender)
 -MAGs: comparar ICM vs EBI

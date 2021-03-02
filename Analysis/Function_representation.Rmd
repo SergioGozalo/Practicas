@@ -21,19 +21,26 @@ library("dplyr")
 library("reshape2")
 library("randomcoloR")
 ```
+
 # Function representation
 
+## Tables reading
+
 ```{r}
-f_go_abundances <- read.table("functional.tables/ERP112966_GO_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 
 f_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 
-f_kegg_meta <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 f_kegg_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_cog_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
 ekey <- read.table("functional.tables/ekey.txt")
 slim <- read.table("functional.tables/GO.slim.txt")
 ```
+
+## KEGG
 
 ```{r}
 #KO and path conexion
@@ -61,26 +68,15 @@ hierarchy <- hierarchy %>%
 all_data_kegg <- merge(all_data_kegg, hierarchy)
 
 #Computing the row sums for every KO in the samples table
-f_kegg_meta2 <- f_kegg_meta
-f_kegg_meta2$sum <- rowSums(f_kegg_meta)
-f_kegg_meta2 <- f_kegg_meta2 %>%
+f_kegg_scg2 <- f_kegg_scg
+f_kegg_scg2$sum <- rowSums(f_kegg_scg)
+f_kegg_scg2 <- f_kegg_scg2 %>%
   select(0, 51)
-f_kegg_meta2 <- tibble::rownames_to_column(f_kegg_meta2, "KO")
-
-#
-f_kegg_meta <- tibble::rownames_to_column(f_kegg_meta, "KO")
+f_kegg_scg2 <- tibble::rownames_to_column(f_kegg_scg2, "KO")
 
 #Merge all
-all_data_kegg1 <- merge(all_data_kegg, f_kegg_meta2, by = "KO")
-all_data_kegg2 <- merge(all_data_kegg, f_kegg_meta, by = "KO")
+all_data_kegg1 <- merge(all_data_kegg, f_kegg_scg2, by = "KO")
 
-#Transform to wide
-all_data_kegg1 <- spread(all_data_kegg1, key = PClass, value = sum)
-
-# Overall Selecting columns
-class_sums <- all_data_kegg1 %>%
-  select(-1,-2,-3)
-kegg_prop <- data.frame(t(colSums(class_sums, na.rm = TRUE)))
 
 # By sample
 kegg_by_sample <- all_data_kegg2 %>%
@@ -102,6 +98,8 @@ pale <- distinctColorPalette(30)
 ggplot(kegg_by_sample, aes(x=variable, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG class") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
+
+## GO-SLIM
 
 ```{r}
 f_go.slim_abundances <- tibble::rownames_to_column(f_go.slim_abundances, "GO")
