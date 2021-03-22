@@ -20,4 +20,4 @@ D2_S20_1000L-m_R00
 D1_S20_776L-m_R00
 
 Parece que los protocolos de filtrado S20 y S320 producen resultados ligeramente diferentes a los otros protocolos de filtrado.
-Las diferencias en volumen parecen no afectar a los resultados.
+Las diferencias en volumen parecen no afectar a los resultados. 

@@ -1,7 +1,7 @@
 ---
-title: "Taxonomic classification"
+title: "Function representation"
 author: "Sergio Gozalo"
-date: "2 de marzo de 2021"
+date: "29 de enero de 2021"
 output: 
   github_document
 ---
@@ -22,15 +22,14 @@ library("reshape2")
 library("randomcoloR")
 ```
 
-# Taxonomic classification
+# Function representation
 
 ## Tables reading
 
 ```{r}
-#EBI
+
 f_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 
-#ICM
 f_kegg_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
 icm_cog_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
@@ -73,14 +72,14 @@ f_kegg_scg2 <- f_kegg_scg
 f_kegg_scg2$sum <- rowSums(f_kegg_scg)
 f_kegg_scg2 <- f_kegg_scg2 %>%
   select(0, 51)
-f_kegg_scg <- tibble::rownames_to_column(f_kegg_scg, "KO")
+f_kegg_scg2 <- tibble::rownames_to_column(f_kegg_scg2, "KO")
 
 #Merge all
-all_data_kegg1 <- merge(all_data_kegg, f_kegg_scg, by = "KO")
+all_data_kegg1 <- merge(all_data_kegg, f_kegg_scg2, by = "KO")
 
 
 # By sample
-kegg_by_sample <- all_data_kegg1 %>%
+kegg_by_sample <- all_data_kegg2 %>%
   select(-1,-2,-3)
 kegg_by_sample <- kegg_by_sample %>%
   group_by(PClass) %>%
@@ -98,50 +97,6 @@ kegg_by_sample <- melt(kegg_by_sample, id.vars = "PClass")
 pale <- distinctColorPalette(30)
 ggplot(kegg_by_sample, aes(x=variable, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG class") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
-
-
-## COG
-
-```{r}
-icm_cog_scg
-cog_categories <- read.delim("functional.tables/COG_categories/letra-categorias.txt")
-cog_to_cat <- read.delim("functional.tables/COG_categories/cog_result_table_all.tsv")
-cog_to_cat <- cog_to_cat %>%
-  select(-1,-2,-5)
-
-cog_to_cat$category <- cog_categories$Categoria[charmatch(cog_to_cat$Cat, cog_categories$Letra)]
-
-
-
-
-
-icm_cog_scg2 <- icm_cog_scg
-icm_cog_scg2$sum <- rowSums(icm_cog_scg)
-icm_cog_scg2 <- icm_cog_scg2 %>%
-  select(0, 51)
-icm_cog_scg <- tibble::rownames_to_column(icm_cog_scg, "COG")
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ## GO-SLIM
@@ -169,9 +124,7 @@ GO_Slim_legend
 
 
 ```{r}
-taxonomy <- read.table("functional.tables/taxonomyResult.EMOSE.ICMv.tsv", sep = "\t")
-head(taxonomy)
-taxonomy <- taxonomy %>% separate(V5, c("Class2","Class3","Class4","Class5","Class6","Class7", "Class8"), ";")
+
 ```
 
 
