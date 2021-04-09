@@ -141,20 +141,20 @@ taxa_kegg <- merge(kegg_by_sample, prueba, by = "Sample")
 # Kegg plots
 
 ## KEGG by treatment
-```{r, dpi=300}
+```{r, dpi=400}
 pale <- distinctColorPalette(30)
 ggplot(taxa_kegg, aes(x=Sample, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
 ## KEGG by taxa
 
-```{r, dpi=300}
+```{r, dpi=400}
 ggplot(taxa_kegg, aes(x=V10, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
 ## KEGG taxa by treatment
 
-```{r}
+```{r, dpi=400}
 taxa_treatment_kegg <- taxa_kegg %>%
   select(1, 4)
 taxa_treatment_kegg$counter <- 1
