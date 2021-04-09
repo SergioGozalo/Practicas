@@ -1,23 +1,11 @@
----
-title: "Taxonomic classification"
-author: "Sergio Gozalo"
-date: "2 de marzo de 2021"
-output: 
-  github_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-	echo = TRUE,
-	message = FALSE,
-	warning = FALSE
-)
-knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Practicas/Practicas/Analysis/"))
-```
+Taxonomic classification
+================
+Sergio Gozalo
+2 de marzo de 2021
 
 ## Loading necessary libraries
 
-```{r message=FALSE, warning=FALSE}
+``` r
 library("vegan")
 library("ggplot2")
 library("tidyr")
@@ -31,7 +19,7 @@ library("randomcoloR")
 
 ## Tables reading
 
-```{r message=FALSE, warning=FALSE}
+``` r
 #EBI
 f_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
 
@@ -48,7 +36,7 @@ slim <- read.table("functional.tables/GO.slim.txt")
 
 ## KEGG
 
-```{r}
+``` r
 #KO and path conexion
 ko_to_path <- read.table(text = gsub(":", "\t", readLines("functional.tables/ko_pathway.list")))
 ko_to_path <- ko_to_path %>%
@@ -99,10 +87,9 @@ colnames(kegg_by_sample) <- lista
 kegg_by_sample <- melt(kegg_by_sample, id.vars = "PClass")
 ```
 
-
 # Function by treatment
 
-```{r}
+``` r
 taxonomy <- read.table("functional.tables/taxonomyResult.samplev.tsv.txt", sep = "\t")
 #taxonomy <- taxonomy %>% separate(V5, c("Class2","Class3","Class4","Class5","Class6","Class7", "Class8"), ";")
 taxonomy_no_nulls <- subset(taxonomy, V3  == c("species", "genus","class","family"))
@@ -134,52 +121,64 @@ colnames(kegg_by_sample) <- c("PClass", "Sample", "value")
 
 # Merging the kegg matrix with the taxa matrix
 taxa_kegg <- merge(kegg_by_sample, prueba, by = "Sample")
-
 ```
-
 
 # Kegg plots
 
 ## KEGG by treatment
-```{r, dpi=300}
+
+``` r
 pale <- distinctColorPalette(30)
 ggplot(taxa_kegg, aes(x=Sample, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
 ## KEGG by taxa
 
-```{r, dpi=300}
+``` r
 ggplot(taxa_kegg, aes(x=V10, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
 ## KEGG taxa by treatment
 
-```{r}
+``` r
 taxa_treatment_kegg <- taxa_kegg %>%
   select(1, 4)
 taxa_treatment_kegg$counter <- 1
 
 
 
-## Hay que elegir que plot queda mejor, si treatments en x y taxa en fill o al rev�s
+## Hay que elegir que plot queda mejor, si treatments en x y taxa en fill o al rev攼㸹s
 
 pale2 <- distinctColorPalette(127)
 ggplot(taxa_treatment_kegg, aes(x=Sample, y =counter, fill = V10)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale2)
+```
 
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+``` r
 pale2 <- distinctColorPalette(47)
 taxa_treatment_plot <- ggplot(taxa_treatment_kegg, aes(x=V10, y = counter, fill = Sample)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.position = "none")  + scale_fill_manual(values = pale2) + labs(x = NULL, y = NULL)
 
 taxa_treatment_legend <- ggplot(taxa_treatment_kegg, aes(x=V10, y = counter, fill = Sample)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm"), plot.margin = unit(c(1,1,1,1.6), "cm")) + labs(x = NULL, y = NULL, fill = "Treatment") + guides(fill=guide_legend(ncol=4)) + scale_fill_manual(values = pale2)
 
 taxa_treatment_plot
+```
+
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-7-2.png)
+
+``` r
 taxa_treatment_legend
 ```
 
-
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-7-3.png)
 
 ## COG
 
-```{r}
+``` r
 cog_categories <- read.delim("functional.tables/COG_categories/letra-categorias.txt")
 cog_to_cat <- read.delim("functional.tables/COG_categories/cog_result_table_all.tsv")
 cog_to_cat <- cog_to_cat %>%
@@ -194,31 +193,9 @@ icm_cog_scg2 <- icm_cog_scg2 %>%
 icm_cog_scg <- tibble::rownames_to_column(icm_cog_scg, "COG")
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## GO-SLIM
 
-```{r}
+``` r
 f_go.slim_abundances <- tibble::rownames_to_column(f_go.slim_abundances, "GO")
 f_go.slim_abundances[1] <- NULL
 f_go.slim_abundances[2] <- NULL
@@ -226,15 +203,21 @@ l <- "description"
 l<- c(l,slim$V3)
 colnames(f_go.slim_abundances) <- l
 f_go.slim_abundances <- melt(f_go.slim_abundances, id.vars = "description")
-
 ```
 
-```{r, dpi=300}
+``` r
 pale <- distinctColorPalette(116)
 GO_Slim_plot <- ggplot(f_go.slim_abundances, aes(x=variable, y = value, fill = description)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.position = "none")  + scale_fill_manual(values = pale) + labs(x = NULL, y = NULL)
 
 GO_Slim_legend <- ggplot(f_go.slim_abundances, aes(x=variable, y = value, fill = description)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm"), plot.margin = unit(c(1,1,1,1.6), "cm")) + labs(x = NULL, y = NULL, fill = "GO-Slim metagneomics") + guides(fill=guide_legend(ncol=4)) + scale_fill_manual(values = pale)
 
 GO_Slim_plot
+```
+
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+``` r
 GO_Slim_legend
 ```
+
+![](Taxonomic_classification_files/figure-markdown_github/unnamed-chunk-10-2.png)
