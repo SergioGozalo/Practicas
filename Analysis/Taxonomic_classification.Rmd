@@ -87,7 +87,6 @@ all_data_kegg1 <- merge(all_data_kegg, f_kegg_scg, by = "KO")
 # By sample
 kegg_by_sample <- all_data_kegg1 %>%
   select(-1,-2,-3)
-#(actualizacion y no funciona?, igualmente el codigo funciona, esto solo hacia mas bonito) ***arrreglado, problema librerias
 kegg_by_sample <- kegg_by_sample %>%
   group_by(PClass) %>%
   dplyr::summarise(across(starts_with("ERR"),sum))
@@ -152,9 +151,14 @@ ggplot(taxa_kegg, aes(x=Sample, y = value, fill = PClass)) + geom_bar(position =
 ggplot(taxa_kegg, aes(x=V10, y = value, fill = PClass)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "KEGG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
 ```
 
+
+################
+
+# MAL
+
 ## KEGG taxa by treatment
 
-```{r, dpi=400}
+```{r eval=FALSE, message=FALSE, warning=FALSE, dpi=400, include=FALSE, paged.print=FALSE}
 taxa_treatment_kegg <- taxa_kegg %>%
   select(1, 4)
 taxa_treatment_kegg$counter <- 1
@@ -175,26 +179,64 @@ taxa_treatment_plot
 taxa_treatment_legend
 ```
 
-
+###############
 
 ## COG
 
 ```{r}
+icm_cog_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 cog_categories <- read.delim("functional.tables/COG_categories/letra-categorias.txt")
-cog_to_cat <- read.delim("functional.tables/COG_categories/cog_result_table_all.tsv")
+cog_to_cat <- read.delim("functional.tables/COG_categories/cog_result_table_all_c2.txt")
 cog_to_cat <- cog_to_cat %>%
   select(-1,-2,-5)
 
 cog_to_cat$category <- cog_categories$Categoria[charmatch(cog_to_cat$Cat, cog_categories$Letra)]
 
-icm_cog_scg2 <- icm_cog_scg
-icm_cog_scg2$sum <- rowSums(icm_cog_scg)
-icm_cog_scg2 <- icm_cog_scg2 %>%
-  select(0, 51)
 icm_cog_scg <- tibble::rownames_to_column(icm_cog_scg, "COG")
+
+all_data_cog <- merge(cog_to_cat, icm_cog_scg, by = "COG")
+
+# By sample
+cog_by_sample <- all_data_cog %>%
+  select(-1,-2)
+cog_by_sample <- cog_by_sample %>%
+  group_by(category) %>%
+  dplyr::summarise(across(starts_with("ERR"),sum))
+
+lista <- "Category"
+lista <- c(lista, ekey$V3)
+colnames(cog_by_sample) <- lista
+
+cog_by_sample <- melt(cog_by_sample, id.vars = "Category")
 ```
 
 
+# COG plots
+
+## COG by treatment
+
+```{r, dpi=400}
+pale <- distinctColorPalette(26)
+ggplot(cog_by_sample, aes(x=variable, y = value, fill = Category)) + geom_bar(position = "fill", stat = "identity") + theme(text = element_text(size = 7), axis.text.x = element_text(size = 5, angle = 90, vjust = 0.5, hjust=1), legend.key.size = unit(0.3, "cm")) + labs(x = NULL, y = NULL, fill = "COG classes") + guides(fill=guide_legend(ncol=1)) + scale_fill_manual(values = pale)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+## PFAM
+
+```{r}
+read.delim("functional.tables/PFAM/clan.txt", header =  FALSE)
+```
 
 
 

@@ -17,82 +17,11 @@ knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Pra
 library("vegan")
 library("ggplot2")
 library("tidyr")
+library("plyr")
 library("dplyr")
 library("reshape2")
 library("randomcoloR")
 ```
-
-#Tables 
-
-```{r}
-#ICM
-f_kegg_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
-
-icm_cog_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
-
-icm_pfam_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
-
-otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, sep = "\t"))
-otu_mitags$OTUId <- NULL
-otu_mitags <- t(otu_mitags)
-
-
-```
-
-## Richness MiTags
-
-```{r}
-otu_mitags_ss <- rrarefy(otu_mitags, min(rowSums(otu_mitags)))
-richness <- estimateR(otu_mitags_ss)
-richness
-```
-
-## Rarefaction MiTags
-
-```{r}
-otu_rare <- rarefaction(otu_mitags_ss)
-```
-
-
-## Rarecurve MiTags
-
-```{r}
-otu_rcurve <- rarecurve(otu_mitags_ss)
-```
-
-## Acumulation curve MiTags
-
-```{r}
-otu_acc <- specaccum(otu_mitags_ss, method = "exact", permutations = 1000)
-plot(otu_acc)
-```
-
-## Richness KEGG
-
-```{r}
-typeof(f_kegg_scg[[1]])
-
-as.integer(f_kegg_scg[[1]])
-kegg_ss <- rrarefy(f_kegg_scg, min(rowSums(f_kegg_scg)))
-richness <- estimateR(kegg_ss)
-richness
-```
-
-## Rarefaction KEGG
-
-```{r}
-kegg_rare <- rarefaction(f_kegg_scg)
-```
-
-
-
-
-
-
-
-
-
-
 
 ```{r include=FALSE}
 rarefaction<-function(x,subsample=1000, plot=TRUE, color=TRUE, error=FALSE, legend=TRUE, symbol){
@@ -175,3 +104,120 @@ list("richness"= storesummary.e, "SE"=richness.error, "subsample"=select)
  
 }
 ```
+
+#Tables 
+
+```{r}
+#ICM
+f_kegg_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+f_kegg_scgt <- t(f_kegg_scg)
+
+f_kegg_mgn <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+f_kegg_mgnt <- t(f_kegg_scg)
+
+icm_cog_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, sep = "\t"))
+otu_mitags$OTUId <- NULL
+otu_mitags <- t(otu_mitags)
+
+
+```
+
+## Richness MiTags
+
+```{r}
+otu_mitags_ss <- rrarefy(otu_mitags, min(rowSums(otu_mitags)))
+richness <- estimateR(otu_mitags_ss)
+richness
+```
+
+## Rarefaction MiTags
+
+```{r}
+otu_rare <- rarefaction(otu_mitags_ss)
+```
+
+
+## Rarecurve MiTags
+
+```{r}
+otu_rcurve <- rarecurve(otu_mitags_ss)
+```
+
+## Acumulation curve MiTags
+
+```{r}
+otu_acc <- specaccum(otu_mitags_ss, method = "exact", permutations = 1000)
+plot(otu_acc)
+```
+
+## Richness KEGG
+
+```{r}
+
+f_keg <- as.data.frame(f_kegg_scg)
+f_keg[,1:50] <- sapply(f_keg[, c(1:50)], as.integer)
+length(f_keg)
+richness <- estimateR(f_keg)
+
+
+f_kegt <- as.data.frame(f_kegg_scgt)
+f_kegt[,1:6965] <- sapply(f_kegt[, c(1:6965)], as.integer)
+length(f_kegt)
+richnesst <- estimateR(f_kegt)
+```
+
+## Rarefaction KEGG
+
+### SCG + trans
+
+```{r}
+kegg_ss <- rrarefy(f_kegt, min(rowSums(f_kegt)))
+kegg_rare <- rarefaction(kegg_ss)
+```
+
+### SCG + no trans
+
+```{r}
+# kegg_ss <- rrarefy(f_keg, min(rowSums(f_keg))) 
+# No rrarefy porque l minimo es 0
+
+kegg_rare <- rarefaction(f_keg)
+```
+
+
+```{r}
+
+f_kegg_mgn <- as.data.frame(f_kegg_mgn)
+f_kegg_mgn[,1:50] <- sapply(f_kegg_mgn[, c(1:50)], as.integer)
+length(f_kegg_mgn)
+richness <- estimateR(f_kegg_mgn)
+
+
+f_kegg_mgnt <- as.data.frame(f_kegg_mgnt)
+f_kegg_mgnt[,1:6965] <- sapply(f_kegg_mgnt[, c(1:6965)], as.integer)
+length(f_kegg_mgnt)
+richnesst <- estimateR(f_kegt)
+```
+
+
+### mgn + trans
+
+```{r}
+kegg_ss <- rrarefy(f_kegg_mgnt, min(rowSums(f_kegg_mgnt)))
+kegg_rare <- rarefaction(kegg_ss)
+```
+
+
+### mgn + no trans
+
+```{r}
+# kegg_ss <- rrarefy(f_kegg_mgn, min(rowSums(f_kegg_mgn)))
+#kegg_rare <- rarefaction(f_kegg_mgn)
+```
+

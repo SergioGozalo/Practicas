@@ -18,7 +18,7 @@
 - Buscar diferncias de funciones con tratamientos
 
 ************ Hacer  ****************
--Analizar tratamientos: Numero de funciones por tratamiento, taxa por tratamiento
+- Analizar tratamientos: Numero de funciones por tratamiento, taxa por tratamiento
 - Realcionar con genomas y buscar 
 
 
