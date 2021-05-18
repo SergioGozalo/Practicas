@@ -1,0 +1,1 @@
+Por lo que veo, la mejor curva de acumulación se ve con los datos normalizados SCG y haciendo el subsampling.

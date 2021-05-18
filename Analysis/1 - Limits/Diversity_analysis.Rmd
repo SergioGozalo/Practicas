@@ -108,18 +108,21 @@ list("richness"= storesummary.e, "SE"=richness.error, "subsample"=select)
 #Tables 
 
 ```{r}
-#ICM
-f_kegg_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
-f_kegg_scgt <- t(f_kegg_scg)
+f_kegg_scgt <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
-f_kegg_mgn <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+f_kegg_mgnt <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
-f_kegg_mgnt <- t(f_kegg_scg)
 
-icm_cog_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_cog_scgt <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
-icm_pfam_scg <- (read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_cog_mgnt <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+
+icm_pfam_scgt <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_mgnt <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
 
 otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, sep = "\t"))
 otu_mitags$OTUId <- NULL
@@ -156,68 +159,152 @@ otu_acc <- specaccum(otu_mitags_ss, method = "exact", permutations = 1000)
 plot(otu_acc)
 ```
 
-## Richness KEGG
+## Accumulation curve KEGG SCG
+
+
+### Whole
 
 ```{r}
+kegg_acc1 <- specaccum(f_kegg_scgt, method = "exact", permutations = 1000)
+plot(kegg_acc1)
+```
 
-f_keg <- as.data.frame(f_kegg_scg)
-f_keg[,1:50] <- sapply(f_keg[, c(1:50)], as.integer)
-length(f_keg)
-richness <- estimateR(f_keg)
+### Subsampled
 
-
+```{r}
 f_kegt <- as.data.frame(f_kegg_scgt)
 f_kegt[,1:6965] <- sapply(f_kegt[, c(1:6965)], as.integer)
-length(f_kegt)
-richnesst <- estimateR(f_kegt)
-```
 
-## Rarefaction KEGG
-
-### SCG + trans
-
-```{r}
 kegg_ss <- rrarefy(f_kegt, min(rowSums(f_kegt)))
-kegg_rare <- rarefaction(kegg_ss)
-```
-
-### SCG + no trans
-
-```{r}
-# kegg_ss <- rrarefy(f_keg, min(rowSums(f_keg))) 
-# No rrarefy porque l minimo es 0
-
-kegg_rare <- rarefaction(f_keg)
+kegg_acc2 <- specaccum(kegg_ss, method = "exact", permutations = 1000)
+plot(kegg_acc2)
 ```
 
 
+
+## Accumulation curve KEGG MGN
+
+### Whole
+
 ```{r}
-
-f_kegg_mgn <- as.data.frame(f_kegg_mgn)
-f_kegg_mgn[,1:50] <- sapply(f_kegg_mgn[, c(1:50)], as.integer)
-length(f_kegg_mgn)
-richness <- estimateR(f_kegg_mgn)
+kegg_acc1.1 <- specaccum(f_kegg_mgnt, method = "exact", permutations = 1000)
+plot(kegg_acc1.1)
+```
 
 
+
+### Subsampled
+
+
+```{r}
 f_kegg_mgnt <- as.data.frame(f_kegg_mgnt)
 f_kegg_mgnt[,1:6965] <- sapply(f_kegg_mgnt[, c(1:6965)], as.integer)
-length(f_kegg_mgnt)
-richnesst <- estimateR(f_kegt)
+length(f_kegg_mgnt[,])
+kegg_ss2 <- rrarefy(f_kegg_mgnt, min(rowSums(f_kegg_mgnt)))
+kegg_acc2.2 <- specaccum(kegg_ss2, method = "exact", permutations = 1000)
+plot(kegg_acc2.2)
 ```
 
 
-### mgn + trans
+
+## Accumulation curve COG SCG
+
+
+### Whole
 
 ```{r}
-kegg_ss <- rrarefy(f_kegg_mgnt, min(rowSums(f_kegg_mgnt)))
-kegg_rare <- rarefaction(kegg_ss)
+cog_acc1 <- specaccum(icm_cog_scgt, method = "exact", permutations = 1000)
+plot(cog_acc1)
 ```
 
 
-### mgn + no trans
+### Subsampled
+
 
 ```{r}
-# kegg_ss <- rrarefy(f_kegg_mgn, min(rowSums(f_kegg_mgn)))
-#kegg_rare <- rarefaction(f_kegg_mgn)
+icm_cog_scgt <- as.data.frame(icm_cog_scgt)
+icm_cog_scgt[,1:4873] <- sapply(icm_cog_scgt[, c(1:4873)], as.integer)
+
+cog_ss <- rrarefy(icm_cog_scgt, min(rowSums(icm_cog_scgt)))
+cog_acc2.1 <- specaccum(cog_ss, method = "exact", permutations = 1000)
+plot(cog_acc2.1)
 ```
+
+
+## Accumulation curve COG MGN
+
+
+### Whole
+
+```{r}
+cog_acc2 <- specaccum(icm_cog_mgnt, method = "exact", permutations = 1000)
+plot(cog_acc2)
+```
+
+
+### Subsampled
+
+
+```{r}
+icm_cog_mgnt <- as.data.frame(icm_cog_mgnt)
+icm_cog_mgnt[,1:4873] <- sapply(icm_cog_mgnt[, c(1:4873)], as.integer)
+
+cog_ss <- rrarefy(icm_cog_mgnt, min(rowSums(icm_cog_mgnt)))
+cog_acc2.1 <- specaccum(cog_ss, method = "exact", permutations = 1000)
+plot(cog_acc2.1)
+```
+
+## Accumulation curve PFAM SCG
+
+
+### Whole
+
+```{r}
+pfam_acc1 <- specaccum(icm_pfam_scgt, method = "exact", permutations = 1000)
+plot(pfam_acc1)
+```
+
+
+### Subsampled
+
+
+```{r}
+icm_pfam_scgt <- as.data.frame(icm_pfam_scgt)
+icm_pfam_scgt[,1:16702] <- sapply(icm_pfam_scgt[, c(1:16702)], as.integer)
+
+pfam_ss <- rrarefy(icm_pfam_scgt, min(rowSums(icm_pfam_scgt)))
+pfam_acc2.1 <- specaccum(pfam_ss, method = "exact", permutations = 1000)
+plot(pfam_acc2.1)
+```
+
+
+## Accumulation curve COG MGN
+
+
+### Whole
+
+```{r}
+pfam_acc2 <- specaccum(icm_pfam_mgnt, method = "exact", permutations = 1000)
+plot(pfam_acc2)
+```
+
+
+### Subsampled
+
+
+```{r}
+icm_pfam_mgnt <- as.data.frame(icm_pfam_mgnt)
+icm_pfam_mgnt[,1:16702] <- sapply(icm_pfam_mgnt[, c(1:16702)], as.integer)
+
+pfam_ss <- rrarefy(icm_pfam_mgnt, min(rowSums(icm_pfam_mgnt)))
+pfam_acc2.1 <- specaccum(pfam_ss, method = "exact", permutations = 1000)
+plot(pfam_acc2.1)
+```
+
+
+
+
+
+
+
 
