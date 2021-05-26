@@ -13,7 +13,7 @@ knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Pra
 
 ## Loading necessary libraries
 
-```{r}
+```{r include=FALSE}
 library("vegan")
 library("ggplot2")
 library("tidyr")
