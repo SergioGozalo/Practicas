@@ -21,88 +21,7 @@ library("plyr")
 library("dplyr")
 library("reshape2")
 library("randomcoloR")
-```
-
-```{r include=FALSE}
-rarefaction<-function(x,subsample=1000, plot=TRUE, color=TRUE, error=FALSE, legend=TRUE, symbol){
-
-        library(vegan)
-        x <- as.matrix(x)
-	y1<-apply(x, 1, sum)
-        rare.data<-x                                   
-
-        select<-unique(sort(c((apply(x, 1, sum)), (seq(0,(max(y1)), by=subsample)), recursive=TRUE)))
-        storesummary.e<-matrix(data=NA, ncol=length(rare.data[,1]),nrow=length(select))
-        rownames(storesummary.e)<-c(select)
-        colnames(storesummary.e)<-rownames(x)
-        storesummary.se<-matrix(data=NA, ncol=length(rare.data[,1]),nrow=length(select))
-        rownames(storesummary.se)<-c(select)
-        colnames(storesummary.se)<-rownames(x)
-
-                for(i in 1:length(select))                      #the for loop
-                        {
-                        select.c<-select[i]                     #assigns the 'i'th element of select to select.c
-                        foo<-rarefy(x,select.c, se=T)           #use whatever vegan fn you want
-                storesummary.e[i,]<-foo[1,]
-                storesummary.se[i,]<-foo[2,]            
-                        }
-                storesummary.e<-as.data.frame(storesummary.e)               
-                richness.error<<-storesummary.se
-                
-for (i in 1:(length(storesummary.e)))
-{
-storesummary.e[,i]<-ifelse(select>sum(x[i,]), NA, storesummary.e[,i])
-}
-
-###############plot result################################
-if (plot==TRUE)
- {
-if(color==TRUE){
-plot(select,storesummary.e[,1], xlab="Individuals in Subsample", 
-xlim=c(0,max(select)), ylim=c(0, 5+(max(storesummary.e[,1:(length(storesummary.e))], na.rm=TRUE))),
-ylab="Mean Species Richness", pch =16, col=2, type="n")
-
-for (j in 1:(length(storesummary.e))){
-points(select, storesummary.e[,j], pch=16, col=j+1, type="b", lty=1)}
-
-if(error==TRUE){
-for (m in 1:(length(storesummary.e))){
-segments(select, storesummary.e[,m]+storesummary.se[,m],select, storesummary.e[,m]-storesummary.se[,m])
-}
-}
-if (legend==TRUE){
-legend("bottomright", colnames(storesummary.e), inset=0.05, lty=1, col=1:length(storesummary.e)+1, lwd=2)
-}
-}
-else
-{
-plot(select,storesummary.e[,1], xlab="Individuals in Subsample", 
-xlim=c(0,max(select)), ylim=c(0, 5+(max(storesummary.e[,1:(length(storesummary.e))], na.rm=TRUE))),
-ylab="Mean Species Richness", pch =16, col=2, type="n")
-
-for (j in 1:(length(storesummary.e))){
-points(select, storesummary.e[,j], type="l", lty=1)}
-
-for (k in 1:(length(storesummary.e))){
-symbol<-ifelse(symbol<length(storesummary.e),rep(symbol,2),symbol)
-points(as.numeric(rownames(subset(storesummary.e, storesummary.e[,k]==max(storesummary.e[,k],na.rm=TRUE)))), max(storesummary.e[,k],na.rm=TRUE), pch=symbol[k], cex=1.5)}
-
-if(error==TRUE){
-for (m in 1:(length(storesummary.e))){
-points(select, storesummary.e[,m]+storesummary.se[,m], type="l", lty=2)
-points(select, storesummary.e[,m]-storesummary.se[,m], type="l", lty=2)}}
-
-k<-1:(length(storesummary.e))
-if (legend==TRUE){
-legend("bottomright", colnames(storesummary.e), pch=symbol[k], inset=0.05, cex=1.3)
-}
-}
-}
-print("rarefaction by J. Jacobs, last update April 17, 2009")
-if(error==TRUE)(print("errors around lines are the se of the iterations, not true se of the means")  )     
-list("richness"= storesummary.e, "SE"=richness.error, "subsample"=select)        
- 
-}
+library("tidyverse")
 ```
 
 #Tables 
@@ -128,28 +47,44 @@ otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, se
 otu_mitags$OTUId <- NULL
 otu_mitags <- t(otu_mitags)
 
+genes <- read.delim("functional.tables/prueba3.tbl.txt", header = TRUE, sep = "\t", row.names = NULL)
+genes <- t(read.delim("functional.tables/EMOSE-GC_ICM_250bp_gene.length.SCG.Norm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
 
 ```
+
+## Genetic diversity
+
+```{r}
+# Hay que cambiar las comas de los exponentes por puntos
+rownames(genes) <- genes$gene
+genes$gene <- NULL
+genes <- mutate_if(genes, 
+                is.character, 
+                str_replace_all, pattern = ",", replacement = ".")
+colnames(genes2)
+genes2 <- t(genes)
+genes2 <- as.data.frame(genes2)
+ncol(genes2)
+genes2[,1:7876] <- sapply(genes2[, c(1:7876)], as.integer)
+gene_ss <- rrarefy(genes2, min(rowSums(genes2)))
+gene_acc <- specaccum(gene_ss, method = "exact", permutations = 1000)
+plot(gene_acc)
+```
+
 
 ## Richness MiTags
 
 ```{r}
 otu_mitags_ss <- rrarefy(otu_mitags, min(rowSums(otu_mitags)))
 richness <- estimateR(otu_mitags_ss)
-richness
-```
-
-## Rarefaction MiTags
-
-```{r}
-otu_rare <- rarefaction(otu_mitags_ss)
 ```
 
 
-## Rarecurve MiTags
+## Rarefaction MiTags 
 
 ```{r}
 otu_rcurve <- rarecurve(otu_mitags_ss)
+#leyenda o eliminar, diferentes muestras tienen diferentes niveles dfe diversidad microbiana
 ```
 
 ## Acumulation curve MiTags
@@ -175,9 +110,10 @@ plot(kegg_acc1)
 f_kegt <- as.data.frame(f_kegg_scgt)
 f_kegt[,1:6965] <- sapply(f_kegt[, c(1:6965)], as.integer)
 
-kegg_ss <- rrarefy(f_kegt, min(rowSums(f_kegt)))
+kegg_ss <- rrarefy(f_kegt, min(rowSums(f_kegt))) # Usar media en vez de min
 kegg_acc2 <- specaccum(kegg_ss, method = "exact", permutations = 1000)
 plot(kegg_acc2)
+
 ```
 
 
@@ -278,7 +214,7 @@ plot(pfam_acc2.1)
 ```
 
 
-## Accumulation curve COG MGN
+## Accumulation curve PFAM MGN
 
 
 ### Whole

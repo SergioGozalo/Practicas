@@ -1,0 +1,14 @@
+mitags diversidad especies
+diversidad funciones
+diversidad genes
+comparar mitags curvas vs genes vs funciones
+se puede saturar nivel funcional pero nivel diversidad o genes alomejor no
+si genes satura puede ser que hayan muchas especies similares 
+curva rarefaccion genes
+montar figuras 
+relacionar todas
+
+figura
+
+cantidad agua filtrada vs cantidad mitags vs genes vs funciones
+
