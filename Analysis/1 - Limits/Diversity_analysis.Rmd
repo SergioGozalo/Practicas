@@ -13,7 +13,7 @@ knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Pra
 
 ## Loading necessary libraries
 
-```{r}
+```{r include=FALSE}
 library("vegan")
 library("ggplot2")
 library("tidyr")
@@ -47,28 +47,77 @@ otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, se
 otu_mitags$OTUId <- NULL
 otu_mitags <- t(otu_mitags)
 
-genes <- read.delim("functional.tables/prueba3.tbl.txt", header = TRUE, sep = "\t", row.names = NULL)
-genes <- t(read.delim("functional.tables/EMOSE-GC_ICM_250bp_gene.length.SCG.Norm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
-
+id <- read.table("functional.tables/ekey.txt")
+genes <- read.delim("functional.tables/EMOSE-GC_ICM_250bp_gene.length.SCG.Norm.counts.tbl", header = TRUE, sep = "\t", row.names = NULL)
+#genes <- read.delim("functional.tables/prueba3.tbl.txt", header = TRUE, sep = "\t", row.names = NULL)
 ```
+
+
+```{r}
+nomb <- read.table("2 - Does sampling affects/gennames.csv", header = TRUE, sep = "_")
+nomb
+nomb <- nomb %>%
+  separate(
+X.gennames, c(NA, "gen"), "^([^_]+)_")
+nomb <- nomb %>%
+  separate(gen, c(NA, "gen"), "^([^_]+)_")
+```
+
 
 ## Genetic diversity
 
 ```{r}
-# Hay que cambiar las comas de los exponentes por puntos
-rownames(genes) <- genes$gene
+# Objetivo: separar por genes, en los datos originales hay "muestra+gen", yo quiero solo gen y unir.
+genes <- genes %>%
+  separate(gene, c(NA, "gen"), "^([^_]+)_")
+genes <- genes %>%
+  separate(gen, c(NA, "gen"), "^([^_]+)_")
+lista <- "gene"
+colnames(genes) <- c(lista,id$V3)
+genes
+
+# Sin subsample
+gennames <- genes$gene
 genes$gene <- NULL
+
+# Hay que cambiar las comas de los exponentes por puntos
 genes <- mutate_if(genes, 
                 is.character, 
                 str_replace_all, pattern = ",", replacement = ".")
-colnames(genes2)
-genes2 <- t(genes)
-genes2 <- as.data.frame(genes2)
-ncol(genes2)
-genes2[,1:7876] <- sapply(genes2[, c(1:7876)], as.integer)
-gene_ss <- rrarefy(genes2, min(rowSums(genes2)))
-gene_acc <- specaccum(gene_ss, method = "exact", permutations = 1000)
+
+# Transponer, transformar en df y en num
+genes2 <- as.data.frame(sapply(genes, as.numeric))
+genes2 <- mutate_if(genes2, 
+                is.numeric, round, digits = 4)
+
+rownames(genes2) <- gennames
+genes2 <- t(genes2)
+length(unique(gennames))
+
+gennames <- gennames %>%
+  separate( gennames, c(NA, "gen"), "^([^_]+)_")
+gennames <- gennames %>%
+  separate(gen, c(NA, "gen"), "^([^_]+)_")
+lista <- "gene"
+colnames(genes) <- c(lista,id$V3)
+genes
+gennames <- as.data.frame(gennames)
+
+#ncol(genes2)
+#???genes2[,1:36726233] <- sapply(genes2[, c(1:36726233)], as.integer)
+
+#Rarecurve
+gene_acc <- specaccum(genes2, method = "exact", permutations = 100)
 plot(gene_acc)
+```
+
+## By filter
+
+```{r}
+s02_s <- c("D1_S02_1L-s_R01","D1_S02_1L-s_R02","D1_S02_1L-s_R03","D1_S02_10L-s_R01","D1_S02_2,5L-s_R01.1","D1_S02_2,5L-s_R01.2","D1_S02_2,5L-s_R01.3","D1_S02_2,5L-s_R01.4","D1_S02_10L-s_R02","D1_S02_10L-s_R03")
+s02_m <- c("D1_S02_10L-m_R01","D1_S02_10L-m_R02","D1_S02_10L-m_R03")
+s20 <- c("D1_S20_30L-m_R123", "D1_S20_120L-m_R01","D1_S20_100L-m_R02","D1_S20_60L-m_R03", "D1_S20_496L-m_R00", "D1_S20_100L-m_R01","D1_S20_100L-m_R02.1","D1_S20_100L-m_R03", "D2_S20_1000L-m_R00","D2_S20_100L-m_R11", "D1_S20_776L-m_R00")
+s23 <- 
 ```
 
 
