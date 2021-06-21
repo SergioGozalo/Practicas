@@ -111,15 +111,6 @@ gene_acc <- specaccum(genes2, method = "exact", permutations = 100)
 plot(gene_acc)
 ```
 
-## By filter
-
-```{r}
-s02_s <- c("D1_S02_1L-s_R01","D1_S02_1L-s_R02","D1_S02_1L-s_R03","D1_S02_10L-s_R01","D1_S02_2,5L-s_R01.1","D1_S02_2,5L-s_R01.2","D1_S02_2,5L-s_R01.3","D1_S02_2,5L-s_R01.4","D1_S02_10L-s_R02","D1_S02_10L-s_R03")
-s02_m <- c("D1_S02_10L-m_R01","D1_S02_10L-m_R02","D1_S02_10L-m_R03")
-s20 <- c("D1_S20_30L-m_R123", "D1_S20_120L-m_R01","D1_S20_100L-m_R02","D1_S20_60L-m_R03", "D1_S20_496L-m_R00", "D1_S20_100L-m_R01","D1_S20_100L-m_R02.1","D1_S20_100L-m_R03", "D2_S20_1000L-m_R00","D2_S20_100L-m_R11", "D1_S20_776L-m_R00")
-s23 <- 
-```
-
 
 ## Richness MiTags
 

@@ -1,3 +1,0 @@
-Limites -> diversity analysis
-Muestreo -> taxonomic classification
-Metodos bioinfo -> metagenomic analysis

@@ -1,0 +1,320 @@
+---
+title: "Functional tables analysis"
+author: "Sergio Gozalo"
+date: "20 de enero de 2021"
+output: 
+  github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = setwd("/Users/Usuario/Desktop/Bioinformatica/Practicas/Practicas/Analysis/"))
+```
+
+## Loading necessary libraries
+
+```{r include=FALSE}
+library("vegan")
+library("ggplot2")
+library("tidyr")
+library("dplyr")
+```
+
+
+
+# EBI tables
+
+## Table reading EBI
+
+```{r}
+
+ebi_go_abundances <- read.table("functional.tables/ERP112966_GO_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_go_abundances$description <- NULL #Need to remove this column to work
+ebi_go_abundances$category <- NULL #Need to remove this column to work
+ebi_go_abundances <- t(ebi_go_abundances)
+
+ebi_go.slim_abundances <- read.table("functional.tables/ERP112966_GO-slim_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_go.slim_abundances$description <- NULL
+ebi_go.slim_abundances$category <- NULL
+ebi_go.slim_abundances <- t(ebi_go.slim_abundances)
+
+ebi_ipr_abundances <- read.table("functional.tables/ERP112966_IPR_abundances_v4.1.tsv", header = TRUE, row.names = 1, sep ="\t")
+ebi_ipr_abundances$description <- NULL
+ebi_ipr_abundances$category <- NULL
+ebi_ipr_abundances <- t(ebi_ipr_abundances)
+```
+
+
+## NMDS
+
+### GO
+
+```{r}
+ebi_go_abundances_ss_bray <- vegdist(ebi_go_abundances_ss, method="bray")
+ebi_go_abundances_ss_bray.nmds <- monoMDS(ebi_go_abundances_ss_bray)
+
+plot(ebi_go_abundances_ss_bray.nmds, main = "GO")
+```
+
+Se observa un cluster, el resto son independientes.
+
+```{r}
+stressplot(ebi_go_abundances_ss_bray.nmds, main = "GO")
+```
+
+
+### GO-SLIM
+
+```{r}
+ebi_go.slim_abundances_ss_bray <- vegdist(ebi_go.slim_abundances_ss, method="bray")
+ebi_go.slim_abundances_ss_bray.nmds <- monoMDS(ebi_go.slim_abundances_ss_bray)
+
+plot(ebi_go.slim_abundances_ss_bray.nmds, main = "GO-SLIM")
+```
+
+Se observa un cluster, el resto son independientes.
+
+```{r}
+stressplot(ebi_go.slim_abundances_ss_bray.nmds, main = "GO-SLIM")
+```
+
+
+### IPR
+
+```{r}
+ebi_ipr_abundances_ss_bray <- vegdist(ebi_ipr_abundances_ss, method="bray")
+ebi_ipr_abundances_ss_bray.nmds <- monoMDS(ebi_ipr_abundances_ss_bray)
+
+plot(ebi_ipr_abundances_ss_bray.nmds, main = "IPR")
+```
+
+Se ve un cluster.
+
+```{r}
+stressplot(ebi_ipr_abundances_ss_bray.nmds, main = "IPR")
+```
+
+## Dendograms
+
+### GO
+
+```{r}
+ebi_go_abundances_ss_bray_hclust <- hclust(ebi_go_abundances_ss_bray, method="average")
+plot(ebi_go_abundances_ss_bray_hclust, main = "GO")
+```
+
+Se observan dos grupos principales, uno de ellos es mucho mas grande y tiene bastantes subdivisiones, siendo las dos primeras.
+
+### GO-SLIM
+
+```{r}
+ebi_go.slim_abundances_ss_bray_hclust <- hclust(ebi_go.slim_abundances_ss_bray, method="average")
+plot(ebi_go.slim_abundances_ss_bray_hclust, main = "GO-SLIM")
+```
+
+Muy parecido al GO, pero con distinta longitud de ramas.
+
+### IPR
+
+```{r}
+ebi_ipr_abundances_ss_bray_hclust <- hclust(ebi_ipr_abundances_ss_bray, method="average")
+plot(ebi_ipr_abundances_ss_bray_hclust, main = "IPR")
+```
+
+Se observan dos grupos principales, uno de ellos es mucho mas grande y tiene bastantes subdivisiones, distribuidas de distinta forma que en GO.
+
+# ICM tables
+
+## Table reading ICM
+
+```{r}
+icm_cog_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_cog_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_COG.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_kegg_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_kegg_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_KEGG.ko.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+
+icm_pfam_meta <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.metaGsizeNorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+icm_pfam_scg <- t(read.table("functional.tables/EMOSE-GC_ICM_250bp_pfam.lengthNorm.SCGnorm.counts.tbl", header = TRUE, sep = "\t", row.names = 1))
+```
+
+## NMDs
+
+### COG
+
+```{r}
+icm_cog_meta_bray <- vegdist(icm_cog_meta, method="bray")
+icm_cog_scg_bray <- vegdist(icm_cog_scg, method="bray")
+
+icm_cog_meta_bray.nmds <- monoMDS(icm_cog_meta_bray)
+icm_cog_scg_bray.nmds <- monoMDS(icm_cog_scg_bray)
+
+# MetaGS
+plot(icm_cog_meta_bray.nmds, main = "COG MetaGS")
+
+
+# SC
+plot(icm_cog_scg_bray.nmds, main = "COG SCG")
+
+```
+
+COG MetaGS: Se pueden observar 4 clusters distintos, tres de ellos cercanos y uno mas distante y sin relación.
+
+COG SCG: Se peuden observar 3 clusters, dos de ellos proximos y uno mas separado pero que aun parece mantener una relación.
+
+
+```{r}
+stressplot(icm_cog_meta_bray.nmds, main = "COG MetaGS")
+stressplot(icm_cog_scg_bray.nmds, main = "COG SCG")
+```
+
+
+### KEGG
+
+```{r}
+icm_kegg_meta_bray <-vegdist(icm_kegg_meta, method="bray") 
+icm_kegg_scg_bray <-vegdist(icm_kegg_scg, method="bray") 
+
+icm_kegg_meta_bray.nmds <- monoMDS(icm_kegg_meta_bray)
+icm_kegg_scg_bray.nmds <- monoMDS(icm_kegg_scg_bray)
+
+# MetaGS
+plot(icm_kegg_meta_bray.nmds, main = "KEGG MetaGS")
+
+
+# SC
+plot(icm_kegg_scg_bray.nmds, main = "KEGG SCG")
+```
+
+KEGG MetaGS: Se observan 4 clusters, en este caso parecen mejor separados, aunque dos de ellos son bastante proximos.
+
+KEGG SCG: Se observan 4 clusters, dos de ellos muy proximos, cerca otro y el cuarto parece bastante alejado.
+
+```{r}
+stressplot(icm_kegg_meta_bray.nmds, main = "KEGG MetaGS")
+stressplot(icm_kegg_scg_bray.nmds, main = "KEGG SCG")
+```
+
+### PFAM
+
+```{r}
+icm_pfam_meta_bray <-vegdist(icm_pfam_meta, method="bray") 
+icm_pfam_scg_bray <-vegdist(icm_pfam_scg, method="bray")
+
+icm_pfam_meta_bray.nmds <- monoMDS(icm_pfam_meta_bray)
+icm_pfam_scg_bray.nmds <- monoMDS(icm_pfam_scg_bray)
+
+# MetaGS
+plot(icm_pfam_meta_bray.nmds, main = "PFAM MetaGS")
+
+
+# SC
+plot(icm_pfam_scg_bray.nmds, main = "PFAM SCG")
+
+```
+
+PFAM MetaGS: En este caso los clusters no estan tan bien definidos, pero se pueden llegar a distinguir 4, dos muy cercanos, un tercero que mantiene relacion y el cuarto totalmente aislado.
+
+PFAM SCG: Se observan 4 clusters, dos de ellos casi solapados, el tercero bastante cerca (mas que en los casos anteriores) y el cuarto aislado.
+
+```{r}
+stressplot(icm_pfam_meta_bray.nmds, main = "PFAM MetaGS")
+stressplot(icm_pfam_scg_bray.nmds, main = "PFAM SCG")
+```
+
+## Dendograms
+
+### COG
+
+```{r}
+icm_cog_meta_bray_hclust <- hclust(icm_cog_meta_bray, method="average")
+plot(icm_cog_meta_bray_hclust, main = "COG MetaGS")
+
+icm_cog_scg_bray_hclust <- hclust(icm_cog_scg_bray, method="average")
+plot(icm_cog_scg_bray_hclust, main = "COG SCG")
+
+```
+
+COG MetaGS: Se observan dos grupos principales que, a su vez, tienen dos subgrupos. Concuerda con los 4 clusters.
+
+COG SCG: Se observan dos grupos principales, uno de ellos parece tener una subdivision importante, en el otro parece no ser tan importante. Concuerda con los clusters.
+
+### KEGG
+
+```{r}
+icm_kegg_meta_bray_hclust <-hclust(icm_kegg_meta_bray, method="average")
+plot(icm_kegg_meta_bray_hclust, main = "KEGG MetaGS")
+
+icm_kegg_scg_bray_hclust <-hclust(icm_kegg_scg_bray, method="average")
+plot(icm_kegg_scg_bray_hclust, main = "KEGG SCG")
+```
+
+KEGG MetaGS: Se pueden observar dos grupos principales y cada uno de ellos dividido en otros dos grupos principales. Concuerda con los clusters.
+
+KEGG SCG: Se pueden observar 2 grupos principales, divididos en otros dos grupos principales cada uno. Concuerda con los clusters.
+
+Muy parecidos a los obtenidos usando COG.
+
+### PFAM
+
+```{r}
+icm_pfam_meta_bray_hclust <-hclust(icm_pfam_meta_bray, method="average")
+plot(icm_pfam_meta_bray_hclust, main = "PFAM MetaGS")
+
+icm_pfam_scg_bray_hclust <-hclust(icm_pfam_scg_bray, method="average")
+plot(icm_pfam_scg_bray_hclust, main = "PFAM SCG")
+
+```
+
+PFAM MetaGS: Se pueden observar 2 grupos principales, divididos en otros dos grupos principales cada uno, pero a partir de ahi las divisiones son muy cortas, familias proximas.
+
+PFAM SCG: En este caso, despues de la division principal, en uno de los grupos se puede observar que las relaciones son muy cercanas.
+
+En ambos casos concuerda con los clusters poco definidos, que implican familias próximas.
+
+## Conclusion EBI vs ICM
+
+En ambos casos los NMDs coinciden con los dendogramas, son coherentes. Por otra parte, los datos obtenidos por el ICM tienen mucha mas capacidad para clasificar en diferentes familias o genes y manteniendo la coherencia entre NMDS y dendogramas. 
+
+Por tanto, considero que el tratamiento/pipeline utilizada en el ICM, con la finalidad de clasificación, es bastante más útil que la usada en el IBM, Mgnify.
+
+
+
+
+# OTU tables MiTags
+
+
+```{r}
+otu_mitags <- (read.delim("functional.tables/otu_table97.txt", header = TRUE, sep = "\t"))
+otu_mitags$OTUId <- NULL
+otu_mitags <- t(otu_mitags)
+```
+
+## NMDS
+
+```{r}
+otu_mitags_ss_bray <- vegdist(otu_mitags_ss, method="bray")
+otu_mitags_ss_bray.nmds <- monoMDS(otu_mitags_ss_bray)
+
+otu_mitags_ss_bray.nmds
+plot(otu_mitags_ss_bray.nmds, main = "MiTags")
+stressplot(otu_mitags_ss_bray.nmds, main = "MiTags")
+```
+
+## Mantel test
+
+```{r}
+otu_mitags_bray <- vegdist(otu_mitags, method="bray")
+plot(otu_mitags_ss_bray,otu_mitags_bray)
+abline(0,1, col = "red")
+mantel(otu_mitags_ss_bray,otu_mitags_bray)
+```
+
+Una buena correlación implica que el subsampling es correcto y que no afecta negativamente al analysis.
+
+
+## Conclusión ITags vs MiTags
+
+Comparando los plots obtenidos por MiTags e ITags (16S), puedo ver diferencias, pero no sabria interpretarlas.
+
+Ahora bien, leyendo y utilizando el paper "Metagenomic 16S rDNA Illumina tags are a powerfulalternative to amplicon sequencing to explore diversityand structure of microbial communities", se puede deducir que usando MiTags la detección de OTUs es mas óptima.
